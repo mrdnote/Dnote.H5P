@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Dnote.H5P" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=Dnote.H5P;Integrated Security=True" SettingsObjectName="Dnote.H5P.Linq.Properties.Settings" SettingsPropertyName="Dnote_H5PConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.[H5P.Content]" Member="H5P_Contents">
+    <Type Name="H5P_Content">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="Language" Type="System.String" DbType="NVarChar(5) NOT NULL" CanBeNull="false" />
+      <Column Name="MainLibraryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="License" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DefaultLanguage" Type="System.String" DbType="NVarChar(5) NOT NULL" CanBeNull="false" />
+      <Association Name="H5P_Content_H5P_Content_Dependency" Member="H5P_Content_Dependencies" ThisKey="Id" OtherKey="ContentId" Type="H5P_Content_Dependency" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[H5P.Content.Dependencies]" Member="H5P_Content_Dependencies">
+    <Type Name="H5P_Content_Dependency">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ContentId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LibraryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="H5P_Content_H5P_Content_Dependency" Member="H5P_Content" ThisKey="ContentId" OtherKey="Id" Type="H5P_Content" IsForeignKey="true" />
+      <Association Name="H5P_Library_H5P_Content_Dependency" Member="H5P_Library" ThisKey="LibraryId" OtherKey="Id" Type="H5P_Library" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[H5P.Library]" Member="H5P_Libraries">
+    <Type Name="H5P_Library">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="MajorVersion" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MinorVersion" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="PatchVersion" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Runnable" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Author" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Column Name="License" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="MachineName" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" />
+      <Association Name="H5P_Library_H5P_Content_Dependency" Member="H5P_Content_Dependencies" ThisKey="Id" OtherKey="LibraryId" Type="H5P_Content_Dependency" />
+      <Association Name="H5P_Library_H5P_Library_Dependency" Member="H5P_Library_Dependencies" ThisKey="Id" OtherKey="LibraryId" Type="H5P_Library_Dependency" />
+      <Association Name="H5P_Library_H5P_Library_Dependency1" Member="H5P_Library_Dependencies1" ThisKey="Id" OtherKey="ReferencedLibraryId" Type="H5P_Library_Dependency" />
+    </Type>
+  </Table>
+  <Table Name="dbo.[H5P.Library.Dependencies]" Member="H5P_Library_Dependencies">
+    <Type Name="H5P_Library_Dependency">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="LibraryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ReferencedLibraryId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="H5P_Library_H5P_Library_Dependency" Member="H5P_Library" ThisKey="LibraryId" OtherKey="Id" Type="H5P_Library" IsForeignKey="true" />
+      <Association Name="H5P_Library_H5P_Library_Dependency1" Member="H5P_Library1" ThisKey="ReferencedLibraryId" OtherKey="Id" Type="H5P_Library" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

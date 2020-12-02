@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 12.875, 8.5" name="DataClasses">
+  <DataContextMoniker Name="/DataClassesDataContext" />
+  <nestedChildShapes>
+    <classShape Id="4aacdff6-3e49-4c01-8eea-086a1d58208a" absoluteBounds="1.75, 0.625, 2, 1.9631982421875">
+      <DataClassMoniker Name="/DataClassesDataContext/H5P_Content" />
+      <nestedChildShapes>
+        <elementListCompartment Id="fda51758-9049-4f67-849e-222ad54150ab" absoluteBounds="1.7650000000000001, 1.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b958b933-8819-46f1-a7d0-69892f16ac2c" absoluteBounds="4.75, 0.625, 2, 1.3862939453125">
+      <DataClassMoniker Name="/DataClassesDataContext/H5P_Content_Dependency" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ab5b7770-aae1-4ee7-a99d-f3f1e33fe497" absoluteBounds="4.765, 1.085, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(3.75 : 1.31814697265625); (4.75 : 1.31814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClassesDataContext/H5P_Content/H5P_Content_H5P_Content_Dependency" />
+      <nodes>
+        <classShapeMoniker Id="4aacdff6-3e49-4c01-8eea-086a1d58208a" />
+        <classShapeMoniker Id="b958b933-8819-46f1-a7d0-69892f16ac2c" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="0a1c5b02-bf75-4685-a532-16be900cd735" absoluteBounds="7.875, 0.625, 2, 2.5401025390625">
+      <DataClassMoniker Name="/DataClassesDataContext/H5P_Library" />
+      <nestedChildShapes>
+        <elementListCompartment Id="64f4db33-aa05-4b0e-bf8f-238b1652593f" absoluteBounds="7.89, 1.085, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(7.875 : 1.31814697265625); (6.75 : 1.31814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClassesDataContext/H5P_Library/H5P_Library_H5P_Content_Dependency" />
+      <nodes>
+        <classShapeMoniker Id="0a1c5b02-bf75-4685-a532-16be900cd735" />
+        <classShapeMoniker Id="b958b933-8819-46f1-a7d0-69892f16ac2c" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="2b9f163b-89fa-4572-acb0-84ae7f9affad" absoluteBounds="10.625, 0.625, 2, 1.3862939453125">
+      <DataClassMoniker Name="/DataClassesDataContext/H5P_Library_Dependency" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7a3fef17-1cbc-43cb-9f71-4a8c6efc0d0c" absoluteBounds="10.64, 1.085, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(9.875 : 1.31814697265625); (10.625 : 1.31814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClassesDataContext/H5P_Library/H5P_Library_H5P_Library_Dependency" />
+      <nodes>
+        <classShapeMoniker Id="0a1c5b02-bf75-4685-a532-16be900cd735" />
+        <classShapeMoniker Id="2b9f163b-89fa-4572-acb0-84ae7f9affad" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(9.875 : 0.909073486328125); (10.625 : 0.909073486328125)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/DataClassesDataContext/H5P_Library/H5P_Library_H5P_Library_Dependency1" />
+      <nodes>
+        <classShapeMoniker Id="0a1c5b02-bf75-4685-a532-16be900cd735" />
+        <classShapeMoniker Id="2b9f163b-89fa-4572-acb0-84ae7f9affad" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>
