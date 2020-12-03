@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dnote.H5P.Linq.Properties {
+namespace Dnote.H5P.NetFW.Linq2Sql.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

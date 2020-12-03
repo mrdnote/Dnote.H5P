@@ -8,8 +8,8 @@
     <ProjectGuid>{E8012235-11BC-4DFD-97CD-58D7B538093B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dnote.H5P.Linq.Test</RootNamespace>
-    <AssemblyName>Dnote.H5P.Linq.Test</AssemblyName>
+    <RootNamespace>Dnote.H5P.Test</RootNamespace>
+    <AssemblyName>Dnote.H5P.Test</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
@@ -52,9 +52,11 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="H5PFakeDataContext.cs" />
     <Compile Include="H5PImporterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,9 +67,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dnote.H5P.Linq\Dnote.H5P.Linq.csproj">
+    <ProjectReference Include="..\Dnote.H5P.Linq\Dnote.H5P.NetFW.Linq2Sql.csproj">
       <Project>{395a4897-773a-494f-bc72-17532866ae50}</Project>
-      <Name>Dnote.H5P.Linq</Name>
+      <Name>Dnote.H5P.NetFW.Linq2Sql</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dnote.H5P\Dnote.H5P.csproj">
       <Project>{3dbc3197-f8c5-46bc-8494-39af55a7361b}</Project>

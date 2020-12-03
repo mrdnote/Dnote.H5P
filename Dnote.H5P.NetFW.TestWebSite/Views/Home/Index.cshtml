@@ -1,0 +1,47 @@
+﻿@using Dnote.H5P.NetFW.TestWebSite.Models
+@using Dnote.H5P.NetFW.TestWebSite.Controllers
+
+@model IndexViewModel
+@{
+    ViewBag.Title = "H5P Test WebSite";
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="jumbotron">
+        <h1>H5P Test WebSite</h1>
+        <p>H5P Test WebSite for the .NET Framework 4.7.2</p>
+    </div>
+
+    <h2>Content items</h2>
+
+    if (!Model.ContentItems.Any())
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <em>No content items uploaded...</em>
+            </div>
+        </div>
+    }
+
+    foreach (var item in Model.ContentItems)
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <a href="@Html.Raw(Url.Action(nameof(HomeController.Exercise), "Home", new { Id = item.Key }))">@item.Value</a>
+            </div>
+        </div>
+    }
+
+    <h2>Upload item</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            <p>Upload a .h5p content item here</p>
+            <input type="file" name="File" />
+            <button type="submit" class="btn btn-primary">Upload</button>
+
+        </div>
+    </div>
+}

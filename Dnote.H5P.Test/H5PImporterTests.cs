@@ -1,12 +1,24 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+#nullable enable
 using System;
 using System.IO;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Dnote.H5P.Enums;
+using Dnote.H5P.NetFW.Linq2Sql;
 
 namespace Dnote.H5P.Test
 {
     [TestClass]
     public class H5PImporterTests
     {
+        private H5PFakeDataContext _context = null!;
+
+        [TestInitialize()]
+        public void Initialize() 
+        {
+            _context = new H5PFakeDataContext();
+        }
+
         [TestMethod]
         public void ImportTest()
         {
@@ -17,17 +29,52 @@ namespace Dnote.H5P.Test
                 Directory.Delete(targetPath, true);
             }
             Directory.CreateDirectory(targetPath);
+
             var storageAgent = new H5PFileStorageAgent(targetPath);
-            var databaseAgent = new H5PInMemoryMetaDataAgent();
+            var databaseAgent = new H5PLinqMetaDataAgent(_context, "ImportFiles");
             var importer = new H5PImporter(storageAgent, databaseAgent);
+
             importer.Import(fileName);
 
-            Assert.IsTrue(File.Exists(Path.Combine(targetPath, "Drop-1.0", "css", "drop-theme-arrows-bounce.min.css")));
-            Assert.IsTrue(File.Exists(Path.Combine(targetPath, "Drop-1.0", "js", "drop.min.js")));
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "EmbeddedJS-1.0", "js", "ejs_production.js")));
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "EmbeddedJS-1.0", "js", "ejs_viewhelpers.js")));
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "FontAwesome-4.5", "h5p-font-awesome.min.css")));
+            Assert.IsTrue(File.Exists(Path.Combine(targetPath, "Tether-1.0", "styles", "tether.min.css")));
+
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "FontAwesome-4.5", "fontawesome-webfont.eot")));
+
+            var item = _context.Repository<H5P_ContentItem>().FirstOrDefault(i => i.ContentId == "test-mc-1291177782275013467.h5p");
+
+            Assert.IsNotNull(item);
+            Assert.AreEqual("en", item.DefaultLanguage);
+
+            var embedTypes = _context.Repository<H5P_ContentItem_EmbedType>().Where(i => i.H5P_ContentItem.ContentId == "test-mc-1291177782275013467.h5p");
+
+            Assert.AreEqual(1, embedTypes.Count());
+            Assert.AreEqual("div", embedTypes.First().Value);
+
+            var contentLibraries = _context.Repository<H5P_ContentItem_Library>().Where(cl => cl.H5P_ContentItem.ContentId == "test-mc-1291177782275013467.h5p").OrderBy(cl => cl.Order);
+
+            Assert.AreEqual(9, contentLibraries.Count());
+
+            var order = 0;
+            foreach (var contentLibrary in contentLibraries)
+            {
+                Assert.AreEqual(order, contentLibrary.Order);
+                order++;
+            }
+
+            var jsIncludeFiles = databaseAgent.GetIncludeFilesForContentItems(new string[] { "test-mc-1291177782275013467.h5p" }, FileTypes.Js);
+
+            Assert.AreEqual(20, jsIncludeFiles.Count());
+            Assert.AreEqual("ImportFiles/EmbeddedJS-1.0/js/ejs_production.js", jsIncludeFiles.First());
+            Assert.AreEqual("ImportFiles/EmbeddedJS-1.0/js/ejs_viewhelpers.js", jsIncludeFiles.Skip(1).First());
+
+            var cssIncludeFiles = databaseAgent.GetIncludeFilesForContentItems(new string[] { "test-mc-1291177782275013467.h5p" }, FileTypes.Css);
+
+            Assert.AreEqual(18, cssIncludeFiles.Count());
+            Assert.AreEqual("ImportFiles/FontAwesome-4.5/h5p-font-awesome.min.css", cssIncludeFiles.First());
+            Assert.AreEqual("ImportFiles/Tether-1.0/styles/tether.min.css", cssIncludeFiles.Skip(1).First());
         }
     }
 }

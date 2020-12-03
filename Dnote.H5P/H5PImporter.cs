@@ -4,6 +4,7 @@ using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
 using Dnote.H5P.Dto;
+using Dnote.H5P.Enums;
 
 namespace Dnote.H5P
 {
@@ -47,7 +48,7 @@ namespace Dnote.H5P
                 }
             }
 
-            // Store dependency meta data in database or whatever storage metadata agent prefers.
+            // Store content item in database or whatever storage metadata agent prefers.
             _metaDataAgent.StoreContent(h5pJson, contentId);
         }
 

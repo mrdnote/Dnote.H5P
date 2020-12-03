@@ -1,0 +1,124 @@
+﻿@using Dnote.H5P.NetFW.UI
+@using Dnote.H5P.NetFW.TestWebSite.Models
+@model ExerciseViewModel
+@{
+    ViewBag.Title = "H5P Test WebSite";
+}
+
+@section head
+{
+    <link rel="stylesheet" href="~/Content/h5p.css" />
+    @Html.H5PCssIncludes(Model.H5PMetaDataAgent, Model.Id)
+}
+
+<div class="jumbotron">
+    <h1>@Model.Title</h1>
+    <p>H5P Test WebSite for the .NET Framework 4.7.2</p>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="h5p-content" id="@Model.Id" data-content-id="@Model.Id"></div>
+
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        window.H5PIntegration = {
+            "baseUrl": "http://www.mysite.com", // No trailing slash
+            "url": "@Url.Content("~/Content/")@Model.Id",          // Relative to web root
+            "postUserStatistics": true,         // Only if user is logged in
+            "ajaxPath": "/path/to/h5p-ajax",    // Only used by older Content Types
+            "ajax": {
+                // Where to post user results
+                "setFinished": "/interactive-contents/123/results/new",
+                // Words beginning with : are placeholders
+                "contentUserData": "/interactive-contents/:contentId/user-data?data_type=:dataType&subContentId=:subContentId"
+            },
+            "saveFreq": 5, // How often current content state should be saved. false to disable.
+            "user": { // Only if logged in !
+                "name": "User Name",
+                "mail": "user@mysite.com"
+            },
+            "siteUrl": "http://www.mysite.com", // Only if NOT logged in!
+            "l10n": { // Text string translations
+                "H5P": {
+                    "fullscreen": "Fullscreen",
+                    "disableFullscreen": "Disable fullscreen",
+                    "download": "Download",
+                    "copyrights": "Rights of use",
+                    "embed": "Embed",
+                    "size": "Size",
+                    "showAdvanced": "Show advanced",
+                    "hideAdvanced": "Hide advanced",
+                    "advancedHelp": "Include this script on your website if you want dynamic sizing of the embedded content:",
+                    "copyrightInformation": "Rights of use",
+                    "close": "Close",
+                    "title": "Title",
+                    "author": "Author",
+                    "year": "Year",
+                    "source": "Source",
+                    "license": "License",
+                    "thumbnail": "Thumbnail",
+                    "noCopyrights": "No copyright information available for this content.",
+                    "downloadDescription": "Download this content as a H5P file.",
+                    "copyrightsDescription": "View copyright information for this content.",
+                    "embedDescription": "View the embed code for this content.",
+                    "h5pDescription": "Visit H5P.org to check out more cool content.",
+                    "contentChanged": "This content has changed since you last used it.",
+                    "startingOver": "You'll be starting over.",
+                    "by": "by",
+                    "reuse": "Reuse",
+                    "showMore": "Show more",
+                    "showLess": "Show less",
+                    "subLevel": "Sublevel"
+                }
+            },            "loadedJs": ['multichoice.js'], // Only required when Embed Type = div
+            "loadedCss": ['multichoice.css'],
+            "contents": []
+        };
+
+        window.H5PIntegration.contents['cid-@Model.Id'] = {
+            "library": "H5P.MultiChoice 1.14", // Library name + major version.minor version
+            "jsonContent": '{"media":{"disableImageZooming":false},"answers":[{"correct":true,"tipsAndFeedback":{"tip":"","chosenFeedback":"","notChosenFeedback":""},"text":"<div>Goed<\/div>\\n"},{"correct":false,"tipsAndFeedback":{"tip":"","chosenFeedback":"","notChosenFeedback":""},"text":"<div>Fout<\/div>\\n"}],"overallFeedback":[{"from":0,"to":100}],"behaviour":{"enableRetry":true,"enableSolutionsButton":true,"enableCheckButton":true,"type":"auto","singlePoint":false,"randomAnswers":true,"showSolutionsRequiresInput":true,"confirmCheckDialog":false,"confirmRetryDialog":false,"autoCheck":false,"passPercentage":100,"showScorePoints":true},"UI":{"checkAnswerButton":"Check","showSolutionButton":"Show solution","tryAgainButton":"Retry","tipsLabel":"Show tip","scoreBarLabel":"You got :num out of :total points","tipAvailable":"Tip available","feedbackAvailable":"Feedback available","readFeedback":"Read feedback","wrongAnswer":"Wrong answer","correctAnswer":"Correct answer","shouldCheck":"Should have been checked","shouldNotCheck":"Should not have been checked","noInput":"Please answer before viewing the solution"},"confirmCheck":{"header":"Finish ?","body":"Are you sure you wish to finish ?","cancelLabel":"Cancel","confirmLabel":"Finish"},"confirmRetry":{"header":"Retry ?","body":"Are you sure you wish to retry ?","cancelLabel":"Cancel","confirmLabel":"Confirm"},"question":"<p>test<\/p>\\n"}',
+            "fullScreen": false, // No fullscreen support
+            "exportUrl": "/path/to/download.h5p",
+            "mainId": 1234,
+            "url": "https://mysite.com/h5p/1234",
+            "title": "How long is a rope?",
+            "contentUserData": {
+                0: { // Sub ID (0 = main content/no id)
+                    'state': false // => FALSE // Data ID
+                }
+            },
+            "displayOptions": {
+                "frame": true, // Show frame and buttons below H5P
+                "export": true, // Display download button
+                "embed": true, // Display embed button
+                "copyright": true, // Display copyright button
+                "icon": true // Display H5P icon
+            },
+            "styles": ['multichoice.css'],
+            "scripts": ['multichoice.js']
+        };
+
+        $(document).ready(function ()
+        {
+            H5P.init();
+        });
+    </script>
+
+    <script src="~/Scripts/jquery.js"></script>
+    <script src="~/Scripts/h5p-event-dispatcher.js"></script>
+    <script src="~/Scripts/h5p-action-bar.js"></script>
+    <script src="~/Scripts/h5p-confirmation-dialog.js"></script>
+    <script src="~/Scripts/h5p.js"></script>
+    <script src="~/Scripts/request-queue.js"></script>
+    <script src="~/Scripts/h5p-x-api-event.js"></script>
+    <script src="~/Scripts/h5p-x-api.js"></script>
+    <script src="~/Scripts/h5p-content-type.js"></script>
+    @Html.H5PJsIncludes(Model.H5PMetaDataAgent, Model.Id)
+}

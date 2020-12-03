@@ -9,7 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Dnote.H5P.Linq
+namespace Dnote.H5P.NetFW.Linq2Sql
 {
 	using System.Data.Linq;
 	using System.Data.Linq.Mapping;
@@ -30,22 +30,25 @@ namespace Dnote.H5P.Linq
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertH5P_Content(H5P_Content instance);
-    partial void UpdateH5P_Content(H5P_Content instance);
-    partial void DeleteH5P_Content(H5P_Content instance);
-    partial void InsertH5P_Content_Dependency(H5P_Content_Dependency instance);
-    partial void UpdateH5P_Content_Dependency(H5P_Content_Dependency instance);
-    partial void DeleteH5P_Content_Dependency(H5P_Content_Dependency instance);
+    partial void InsertH5P_ContentItem(H5P_ContentItem instance);
+    partial void UpdateH5P_ContentItem(H5P_ContentItem instance);
+    partial void DeleteH5P_ContentItem(H5P_ContentItem instance);
+    partial void InsertH5P_ContentItem_Library(H5P_ContentItem_Library instance);
+    partial void UpdateH5P_ContentItem_Library(H5P_ContentItem_Library instance);
+    partial void DeleteH5P_ContentItem_Library(H5P_ContentItem_Library instance);
+    partial void InsertH5P_ContentItem_EmbedType(H5P_ContentItem_EmbedType instance);
+    partial void UpdateH5P_ContentItem_EmbedType(H5P_ContentItem_EmbedType instance);
+    partial void DeleteH5P_ContentItem_EmbedType(H5P_ContentItem_EmbedType instance);
     partial void InsertH5P_Library(H5P_Library instance);
     partial void UpdateH5P_Library(H5P_Library instance);
     partial void DeleteH5P_Library(H5P_Library instance);
-    partial void InsertH5P_Library_Dependency(H5P_Library_Dependency instance);
-    partial void UpdateH5P_Library_Dependency(H5P_Library_Dependency instance);
-    partial void DeleteH5P_Library_Dependency(H5P_Library_Dependency instance);
+    partial void InsertH5P_Library_File(H5P_Library_File instance);
+    partial void UpdateH5P_Library_File(H5P_Library_File instance);
+    partial void DeleteH5P_Library_File(H5P_Library_File instance);
     #endregion
 		
 		public DataClassesDataContext() : 
-				base(global::Dnote.H5P.Linq.Properties.Settings.Default.Dnote_H5PConnectionString, mappingSource)
+				base(global::Dnote.H5P.NetFW.Linq2Sql.Properties.Settings.Default.Dnote_H5PConnectionString, mappingSource)
 		{
 			OnCreated();
 		}
@@ -74,19 +77,27 @@ namespace Dnote.H5P.Linq
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<H5P_Content> H5P_Contents
+		public System.Data.Linq.Table<H5P_ContentItem> H5P_ContentItems
 		{
 			get
 			{
-				return this.GetTable<H5P_Content>();
+				return this.GetTable<H5P_ContentItem>();
 			}
 		}
 		
-		public System.Data.Linq.Table<H5P_Content_Dependency> H5P_Content_Dependencies
+		public System.Data.Linq.Table<H5P_ContentItem_Library> H5P_ContentItem_Libraries
 		{
 			get
 			{
-				return this.GetTable<H5P_Content_Dependency>();
+				return this.GetTable<H5P_ContentItem_Library>();
+			}
+		}
+		
+		public System.Data.Linq.Table<H5P_ContentItem_EmbedType> H5P_ContentItem_EmbedTypes
+		{
+			get
+			{
+				return this.GetTable<H5P_ContentItem_EmbedType>();
 			}
 		}
 		
@@ -98,22 +109,24 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		public System.Data.Linq.Table<H5P_Library_Dependency> H5P_Library_Dependencies
+		public System.Data.Linq.Table<H5P_Library_File> H5P_Library_Files
 		{
 			get
 			{
-				return this.GetTable<H5P_Library_Dependency>();
+				return this.GetTable<H5P_Library_File>();
 			}
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.Content]")]
-	public partial class H5P_Content : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.ContentItems]")]
+	public partial class H5P_ContentItem : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
+		
+		private string _ContentId;
 		
 		private string _Title;
 		
@@ -125,7 +138,9 @@ namespace Dnote.H5P.Linq
 		
 		private string _DefaultLanguage;
 		
-		private EntitySet<H5P_Content_Dependency> _H5P_Content_Dependencies;
+		private EntitySet<H5P_ContentItem_Library> _H5P_ContentItem_Libraries;
+		
+		private EntitySet<H5P_ContentItem_EmbedType> _H5P_ContentItem_EmbedTypes;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -133,6 +148,8 @@ namespace Dnote.H5P.Linq
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
+    partial void OnContentIdChanging(string value);
+    partial void OnContentIdChanged();
     partial void OnTitleChanging(string value);
     partial void OnTitleChanged();
     partial void OnLanguageChanging(string value);
@@ -145,9 +162,10 @@ namespace Dnote.H5P.Linq
     partial void OnDefaultLanguageChanged();
     #endregion
 		
-		public H5P_Content()
+		public H5P_ContentItem()
 		{
-			this._H5P_Content_Dependencies = new EntitySet<H5P_Content_Dependency>(new Action<H5P_Content_Dependency>(this.attach_H5P_Content_Dependencies), new Action<H5P_Content_Dependency>(this.detach_H5P_Content_Dependencies));
+			this._H5P_ContentItem_Libraries = new EntitySet<H5P_ContentItem_Library>(new Action<H5P_ContentItem_Library>(this.attach_H5P_ContentItem_Libraries), new Action<H5P_ContentItem_Library>(this.detach_H5P_ContentItem_Libraries));
+			this._H5P_ContentItem_EmbedTypes = new EntitySet<H5P_ContentItem_EmbedType>(new Action<H5P_ContentItem_EmbedType>(this.attach_H5P_ContentItem_EmbedTypes), new Action<H5P_ContentItem_EmbedType>(this.detach_H5P_ContentItem_EmbedTypes));
 			OnCreated();
 		}
 		
@@ -167,6 +185,26 @@ namespace Dnote.H5P.Linq
 					this._Id = value;
 					this.SendPropertyChanged("Id");
 					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContentId", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string ContentId
+		{
+			get
+			{
+				return this._ContentId;
+			}
+			set
+			{
+				if ((this._ContentId != value))
+				{
+					this.OnContentIdChanging(value);
+					this.SendPropertyChanging();
+					this._ContentId = value;
+					this.SendPropertyChanged("ContentId");
+					this.OnContentIdChanged();
 				}
 			}
 		}
@@ -271,16 +309,29 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Content_H5P_Content_Dependency", Storage="_H5P_Content_Dependencies", ThisKey="Id", OtherKey="ContentId")]
-		public EntitySet<H5P_Content_Dependency> H5P_Content_Dependencies
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_ContentItem_H5P_ContentItem_Library", Storage="_H5P_ContentItem_Libraries", ThisKey="Id", OtherKey="ContentItemId")]
+		public EntitySet<H5P_ContentItem_Library> H5P_ContentItem_Libraries
 		{
 			get
 			{
-				return this._H5P_Content_Dependencies;
+				return this._H5P_ContentItem_Libraries;
 			}
 			set
 			{
-				this._H5P_Content_Dependencies.Assign(value);
+				this._H5P_ContentItem_Libraries.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_ContentItem_H5P_ContentItem_EmbedType", Storage="_H5P_ContentItem_EmbedTypes", ThisKey="Id", OtherKey="ContentId")]
+		public EntitySet<H5P_ContentItem_EmbedType> H5P_ContentItem_EmbedTypes
+		{
+			get
+			{
+				return this._H5P_ContentItem_EmbedTypes;
+			}
+			set
+			{
+				this._H5P_ContentItem_EmbedTypes.Assign(value);
 			}
 		}
 		
@@ -304,32 +355,46 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		private void attach_H5P_Content_Dependencies(H5P_Content_Dependency entity)
+		private void attach_H5P_ContentItem_Libraries(H5P_ContentItem_Library entity)
 		{
 			this.SendPropertyChanging();
-			entity.H5P_Content = this;
+			entity.H5P_ContentItem = this;
 		}
 		
-		private void detach_H5P_Content_Dependencies(H5P_Content_Dependency entity)
+		private void detach_H5P_ContentItem_Libraries(H5P_ContentItem_Library entity)
 		{
 			this.SendPropertyChanging();
-			entity.H5P_Content = null;
+			entity.H5P_ContentItem = null;
+		}
+		
+		private void attach_H5P_ContentItem_EmbedTypes(H5P_ContentItem_EmbedType entity)
+		{
+			this.SendPropertyChanging();
+			entity.H5P_ContentItem = this;
+		}
+		
+		private void detach_H5P_ContentItem_EmbedTypes(H5P_ContentItem_EmbedType entity)
+		{
+			this.SendPropertyChanging();
+			entity.H5P_ContentItem = null;
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.Content.Dependencies]")]
-	public partial class H5P_Content_Dependency : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.ContentItem.Libraries]")]
+	public partial class H5P_ContentItem_Library : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 		
 		private int _Id;
 		
-		private int _ContentId;
+		private int _ContentItemId;
 		
 		private int _LibraryId;
 		
-		private EntityRef<H5P_Content> _H5P_Content;
+		private int _Order;
+		
+		private EntityRef<H5P_ContentItem> _H5P_ContentItem;
 		
 		private EntityRef<H5P_Library> _H5P_Library;
 		
@@ -339,16 +404,227 @@ namespace Dnote.H5P.Linq
     partial void OnCreated();
     partial void OnIdChanging(int value);
     partial void OnIdChanged();
-    partial void OnContentIdChanging(int value);
-    partial void OnContentIdChanged();
+    partial void OnContentItemIdChanging(int value);
+    partial void OnContentItemIdChanged();
     partial void OnLibraryIdChanging(int value);
     partial void OnLibraryIdChanged();
+    partial void OnOrderChanging(int value);
+    partial void OnOrderChanged();
     #endregion
 		
-		public H5P_Content_Dependency()
+		public H5P_ContentItem_Library()
 		{
-			this._H5P_Content = default(EntityRef<H5P_Content>);
+			this._H5P_ContentItem = default(EntityRef<H5P_ContentItem>);
 			this._H5P_Library = default(EntityRef<H5P_Library>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ContentItemId", DbType="Int NOT NULL")]
+		public int ContentItemId
+		{
+			get
+			{
+				return this._ContentItemId;
+			}
+			set
+			{
+				if ((this._ContentItemId != value))
+				{
+					if (this._H5P_ContentItem.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnContentItemIdChanging(value);
+					this.SendPropertyChanging();
+					this._ContentItemId = value;
+					this.SendPropertyChanged("ContentItemId");
+					this.OnContentItemIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LibraryId", DbType="Int NOT NULL")]
+		public int LibraryId
+		{
+			get
+			{
+				return this._LibraryId;
+			}
+			set
+			{
+				if ((this._LibraryId != value))
+				{
+					if (this._H5P_Library.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnLibraryIdChanging(value);
+					this.SendPropertyChanging();
+					this._LibraryId = value;
+					this.SendPropertyChanged("LibraryId");
+					this.OnLibraryIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Order]", Storage="_Order", DbType="Int NOT NULL")]
+		public int Order
+		{
+			get
+			{
+				return this._Order;
+			}
+			set
+			{
+				if ((this._Order != value))
+				{
+					this.OnOrderChanging(value);
+					this.SendPropertyChanging();
+					this._Order = value;
+					this.SendPropertyChanged("Order");
+					this.OnOrderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_ContentItem_H5P_ContentItem_Library", Storage="_H5P_ContentItem", ThisKey="ContentItemId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public H5P_ContentItem H5P_ContentItem
+		{
+			get
+			{
+				return this._H5P_ContentItem.Entity;
+			}
+			set
+			{
+				H5P_ContentItem previousValue = this._H5P_ContentItem.Entity;
+				if (((previousValue != value) 
+							|| (this._H5P_ContentItem.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._H5P_ContentItem.Entity = null;
+						previousValue.H5P_ContentItem_Libraries.Remove(this);
+					}
+					this._H5P_ContentItem.Entity = value;
+					if ((value != null))
+					{
+						value.H5P_ContentItem_Libraries.Add(this);
+						this._ContentItemId = value.Id;
+					}
+					else
+					{
+						this._ContentItemId = default(int);
+					}
+					this.SendPropertyChanged("H5P_ContentItem");
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_ContentItem_Library", Storage="_H5P_Library", ThisKey="LibraryId", OtherKey="Id", IsForeignKey=true)]
+		public H5P_Library H5P_Library
+		{
+			get
+			{
+				return this._H5P_Library.Entity;
+			}
+			set
+			{
+				H5P_Library previousValue = this._H5P_Library.Entity;
+				if (((previousValue != value) 
+							|| (this._H5P_Library.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._H5P_Library.Entity = null;
+						previousValue.H5P_ContentItem_Libraries.Remove(this);
+					}
+					this._H5P_Library.Entity = value;
+					if ((value != null))
+					{
+						value.H5P_ContentItem_Libraries.Add(this);
+						this._LibraryId = value.Id;
+					}
+					else
+					{
+						this._LibraryId = default(int);
+					}
+					this.SendPropertyChanged("H5P_Library");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.ContentItem.EmbedTypes]")]
+	public partial class H5P_ContentItem_EmbedType : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private int _ContentId;
+		
+		private string _Value;
+		
+		private EntityRef<H5P_ContentItem> _H5P_ContentItem;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnContentIdChanging(int value);
+    partial void OnContentIdChanged();
+    partial void OnValueChanging(string value);
+    partial void OnValueChanged();
+    #endregion
+		
+		public H5P_ContentItem_EmbedType()
+		{
+			this._H5P_ContentItem = default(EntityRef<H5P_ContentItem>);
 			OnCreated();
 		}
 		
@@ -383,7 +659,7 @@ namespace Dnote.H5P.Linq
 			{
 				if ((this._ContentId != value))
 				{
-					if (this._H5P_Content.HasLoadedOrAssignedValue)
+					if (this._H5P_ContentItem.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -396,94 +672,56 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_LibraryId", DbType="Int NOT NULL")]
-		public int LibraryId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Value", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Value
 		{
 			get
 			{
-				return this._LibraryId;
+				return this._Value;
 			}
 			set
 			{
-				if ((this._LibraryId != value))
+				if ((this._Value != value))
 				{
-					if (this._H5P_Library.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnLibraryIdChanging(value);
+					this.OnValueChanging(value);
 					this.SendPropertyChanging();
-					this._LibraryId = value;
-					this.SendPropertyChanged("LibraryId");
-					this.OnLibraryIdChanged();
+					this._Value = value;
+					this.SendPropertyChanged("Value");
+					this.OnValueChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Content_H5P_Content_Dependency", Storage="_H5P_Content", ThisKey="ContentId", OtherKey="Id", IsForeignKey=true)]
-		public H5P_Content H5P_Content
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_ContentItem_H5P_ContentItem_EmbedType", Storage="_H5P_ContentItem", ThisKey="ContentId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public H5P_ContentItem H5P_ContentItem
 		{
 			get
 			{
-				return this._H5P_Content.Entity;
+				return this._H5P_ContentItem.Entity;
 			}
 			set
 			{
-				H5P_Content previousValue = this._H5P_Content.Entity;
+				H5P_ContentItem previousValue = this._H5P_ContentItem.Entity;
 				if (((previousValue != value) 
-							|| (this._H5P_Content.HasLoadedOrAssignedValue == false)))
+							|| (this._H5P_ContentItem.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._H5P_Content.Entity = null;
-						previousValue.H5P_Content_Dependencies.Remove(this);
+						this._H5P_ContentItem.Entity = null;
+						previousValue.H5P_ContentItem_EmbedTypes.Remove(this);
 					}
-					this._H5P_Content.Entity = value;
+					this._H5P_ContentItem.Entity = value;
 					if ((value != null))
 					{
-						value.H5P_Content_Dependencies.Add(this);
+						value.H5P_ContentItem_EmbedTypes.Add(this);
 						this._ContentId = value.Id;
 					}
 					else
 					{
 						this._ContentId = default(int);
 					}
-					this.SendPropertyChanged("H5P_Content");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Content_Dependency", Storage="_H5P_Library", ThisKey="LibraryId", OtherKey="Id", IsForeignKey=true)]
-		public H5P_Library H5P_Library
-		{
-			get
-			{
-				return this._H5P_Library.Entity;
-			}
-			set
-			{
-				H5P_Library previousValue = this._H5P_Library.Entity;
-				if (((previousValue != value) 
-							|| (this._H5P_Library.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._H5P_Library.Entity = null;
-						previousValue.H5P_Content_Dependencies.Remove(this);
-					}
-					this._H5P_Library.Entity = value;
-					if ((value != null))
-					{
-						value.H5P_Content_Dependencies.Add(this);
-						this._LibraryId = value.Id;
-					}
-					else
-					{
-						this._LibraryId = default(int);
-					}
-					this.SendPropertyChanged("H5P_Library");
+					this.SendPropertyChanged("H5P_ContentItem");
 				}
 			}
 		}
@@ -509,7 +747,7 @@ namespace Dnote.H5P.Linq
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.Library]")]
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.Libraries]")]
 	public partial class H5P_Library : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
@@ -519,25 +757,27 @@ namespace Dnote.H5P.Linq
 		
 		private string _Title;
 		
+		private string _MachineName;
+		
 		private int _MajorVersion;
 		
 		private int _MinorVersion;
 		
 		private int _PatchVersion;
 		
-		private int _Runnable;
+		private System.Nullable<int> _CoreApiMajorVersion;
+		
+		private System.Nullable<int> _CoreApiMinorVersion;
 		
 		private string _Author;
 		
-		private string _License;
+		private System.DateTime _AddedOn;
 		
-		private string _MachineName;
+		private System.DateTime _UpdatedOn;
 		
-		private EntitySet<H5P_Content_Dependency> _H5P_Content_Dependencies;
+		private EntitySet<H5P_ContentItem_Library> _H5P_ContentItem_Libraries;
 		
-		private EntitySet<H5P_Library_Dependency> _H5P_Library_Dependencies;
-		
-		private EntitySet<H5P_Library_Dependency> _H5P_Library_Dependencies1;
+		private EntitySet<H5P_Library_File> _H5P_Library_Files;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -547,27 +787,30 @@ namespace Dnote.H5P.Linq
     partial void OnIdChanged();
     partial void OnTitleChanging(string value);
     partial void OnTitleChanged();
+    partial void OnMachineNameChanging(string value);
+    partial void OnMachineNameChanged();
     partial void OnMajorVersionChanging(int value);
     partial void OnMajorVersionChanged();
     partial void OnMinorVersionChanging(int value);
     partial void OnMinorVersionChanged();
     partial void OnPatchVersionChanging(int value);
     partial void OnPatchVersionChanged();
-    partial void OnRunnableChanging(int value);
-    partial void OnRunnableChanged();
+    partial void OnCoreApiMajorVersionChanging(System.Nullable<int> value);
+    partial void OnCoreApiMajorVersionChanged();
+    partial void OnCoreApiMinorVersionChanging(System.Nullable<int> value);
+    partial void OnCoreApiMinorVersionChanged();
     partial void OnAuthorChanging(string value);
     partial void OnAuthorChanged();
-    partial void OnLicenseChanging(string value);
-    partial void OnLicenseChanged();
-    partial void OnMachineNameChanging(string value);
-    partial void OnMachineNameChanged();
+    partial void OnAddedOnChanging(System.DateTime value);
+    partial void OnAddedOnChanged();
+    partial void OnUpdatedOnChanging(System.DateTime value);
+    partial void OnUpdatedOnChanged();
     #endregion
 		
 		public H5P_Library()
 		{
-			this._H5P_Content_Dependencies = new EntitySet<H5P_Content_Dependency>(new Action<H5P_Content_Dependency>(this.attach_H5P_Content_Dependencies), new Action<H5P_Content_Dependency>(this.detach_H5P_Content_Dependencies));
-			this._H5P_Library_Dependencies = new EntitySet<H5P_Library_Dependency>(new Action<H5P_Library_Dependency>(this.attach_H5P_Library_Dependencies), new Action<H5P_Library_Dependency>(this.detach_H5P_Library_Dependencies));
-			this._H5P_Library_Dependencies1 = new EntitySet<H5P_Library_Dependency>(new Action<H5P_Library_Dependency>(this.attach_H5P_Library_Dependencies1), new Action<H5P_Library_Dependency>(this.detach_H5P_Library_Dependencies1));
+			this._H5P_ContentItem_Libraries = new EntitySet<H5P_ContentItem_Library>(new Action<H5P_ContentItem_Library>(this.attach_H5P_ContentItem_Libraries), new Action<H5P_ContentItem_Library>(this.detach_H5P_ContentItem_Libraries));
+			this._H5P_Library_Files = new EntitySet<H5P_Library_File>(new Action<H5P_Library_File>(this.attach_H5P_Library_Files), new Action<H5P_Library_File>(this.detach_H5P_Library_Files));
 			OnCreated();
 		}
 		
@@ -607,6 +850,26 @@ namespace Dnote.H5P.Linq
 					this._Title = value;
 					this.SendPropertyChanged("Title");
 					this.OnTitleChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MachineName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
+		public string MachineName
+		{
+			get
+			{
+				return this._MachineName;
+			}
+			set
+			{
+				if ((this._MachineName != value))
+				{
+					this.OnMachineNameChanging(value);
+					this.SendPropertyChanging();
+					this._MachineName = value;
+					this.SendPropertyChanged("MachineName");
+					this.OnMachineNameChanged();
 				}
 			}
 		}
@@ -671,22 +934,42 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Runnable", DbType="Int NOT NULL")]
-		public int Runnable
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoreApiMajorVersion", DbType="Int")]
+		public System.Nullable<int> CoreApiMajorVersion
 		{
 			get
 			{
-				return this._Runnable;
+				return this._CoreApiMajorVersion;
 			}
 			set
 			{
-				if ((this._Runnable != value))
+				if ((this._CoreApiMajorVersion != value))
 				{
-					this.OnRunnableChanging(value);
+					this.OnCoreApiMajorVersionChanging(value);
 					this.SendPropertyChanging();
-					this._Runnable = value;
-					this.SendPropertyChanged("Runnable");
-					this.OnRunnableChanged();
+					this._CoreApiMajorVersion = value;
+					this.SendPropertyChanged("CoreApiMajorVersion");
+					this.OnCoreApiMajorVersionChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CoreApiMinorVersion", DbType="Int")]
+		public System.Nullable<int> CoreApiMinorVersion
+		{
+			get
+			{
+				return this._CoreApiMinorVersion;
+			}
+			set
+			{
+				if ((this._CoreApiMinorVersion != value))
+				{
+					this.OnCoreApiMinorVersionChanging(value);
+					this.SendPropertyChanging();
+					this._CoreApiMinorVersion = value;
+					this.SendPropertyChanged("CoreApiMinorVersion");
+					this.OnCoreApiMinorVersionChanged();
 				}
 			}
 		}
@@ -711,82 +994,69 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_License", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
-		public string License
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_AddedOn", DbType="DateTime NOT NULL")]
+		public System.DateTime AddedOn
 		{
 			get
 			{
-				return this._License;
+				return this._AddedOn;
 			}
 			set
 			{
-				if ((this._License != value))
+				if ((this._AddedOn != value))
 				{
-					this.OnLicenseChanging(value);
+					this.OnAddedOnChanging(value);
 					this.SendPropertyChanging();
-					this._License = value;
-					this.SendPropertyChanged("License");
-					this.OnLicenseChanged();
+					this._AddedOn = value;
+					this.SendPropertyChanged("AddedOn");
+					this.OnAddedOnChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_MachineName", DbType="NVarChar(100) NOT NULL", CanBeNull=false)]
-		public string MachineName
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UpdatedOn", DbType="DateTime NOT NULL")]
+		public System.DateTime UpdatedOn
 		{
 			get
 			{
-				return this._MachineName;
+				return this._UpdatedOn;
 			}
 			set
 			{
-				if ((this._MachineName != value))
+				if ((this._UpdatedOn != value))
 				{
-					this.OnMachineNameChanging(value);
+					this.OnUpdatedOnChanging(value);
 					this.SendPropertyChanging();
-					this._MachineName = value;
-					this.SendPropertyChanged("MachineName");
-					this.OnMachineNameChanged();
+					this._UpdatedOn = value;
+					this.SendPropertyChanged("UpdatedOn");
+					this.OnUpdatedOnChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Content_Dependency", Storage="_H5P_Content_Dependencies", ThisKey="Id", OtherKey="LibraryId")]
-		public EntitySet<H5P_Content_Dependency> H5P_Content_Dependencies
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_ContentItem_Library", Storage="_H5P_ContentItem_Libraries", ThisKey="Id", OtherKey="LibraryId")]
+		public EntitySet<H5P_ContentItem_Library> H5P_ContentItem_Libraries
 		{
 			get
 			{
-				return this._H5P_Content_Dependencies;
+				return this._H5P_ContentItem_Libraries;
 			}
 			set
 			{
-				this._H5P_Content_Dependencies.Assign(value);
+				this._H5P_ContentItem_Libraries.Assign(value);
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Library_Dependency", Storage="_H5P_Library_Dependencies", ThisKey="Id", OtherKey="LibraryId")]
-		public EntitySet<H5P_Library_Dependency> H5P_Library_Dependencies
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Library_File", Storage="_H5P_Library_Files", ThisKey="Id", OtherKey="LibraryId")]
+		public EntitySet<H5P_Library_File> H5P_Library_Files
 		{
 			get
 			{
-				return this._H5P_Library_Dependencies;
+				return this._H5P_Library_Files;
 			}
 			set
 			{
-				this._H5P_Library_Dependencies.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Library_Dependency1", Storage="_H5P_Library_Dependencies1", ThisKey="Id", OtherKey="ReferencedLibraryId")]
-		public EntitySet<H5P_Library_Dependency> H5P_Library_Dependencies1
-		{
-			get
-			{
-				return this._H5P_Library_Dependencies1;
-			}
-			set
-			{
-				this._H5P_Library_Dependencies1.Assign(value);
+				this._H5P_Library_Files.Assign(value);
 			}
 		}
 		
@@ -810,45 +1080,33 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		private void attach_H5P_Content_Dependencies(H5P_Content_Dependency entity)
+		private void attach_H5P_ContentItem_Libraries(H5P_ContentItem_Library entity)
 		{
 			this.SendPropertyChanging();
 			entity.H5P_Library = this;
 		}
 		
-		private void detach_H5P_Content_Dependencies(H5P_Content_Dependency entity)
+		private void detach_H5P_ContentItem_Libraries(H5P_ContentItem_Library entity)
 		{
 			this.SendPropertyChanging();
 			entity.H5P_Library = null;
 		}
 		
-		private void attach_H5P_Library_Dependencies(H5P_Library_Dependency entity)
+		private void attach_H5P_Library_Files(H5P_Library_File entity)
 		{
 			this.SendPropertyChanging();
 			entity.H5P_Library = this;
 		}
 		
-		private void detach_H5P_Library_Dependencies(H5P_Library_Dependency entity)
+		private void detach_H5P_Library_Files(H5P_Library_File entity)
 		{
 			this.SendPropertyChanging();
 			entity.H5P_Library = null;
-		}
-		
-		private void attach_H5P_Library_Dependencies1(H5P_Library_Dependency entity)
-		{
-			this.SendPropertyChanging();
-			entity.H5P_Library1 = this;
-		}
-		
-		private void detach_H5P_Library_Dependencies1(H5P_Library_Dependency entity)
-		{
-			this.SendPropertyChanging();
-			entity.H5P_Library1 = null;
 		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.Library.Dependencies]")]
-	public partial class H5P_Library_Dependency : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.[H5P.Library.Files]")]
+	public partial class H5P_Library_File : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -857,11 +1115,13 @@ namespace Dnote.H5P.Linq
 		
 		private int _LibraryId;
 		
-		private int _ReferencedLibraryId;
+		private int _Type;
+		
+		private string _Path;
+		
+		private int _Order;
 		
 		private EntityRef<H5P_Library> _H5P_Library;
-		
-		private EntityRef<H5P_Library> _H5P_Library1;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -871,14 +1131,17 @@ namespace Dnote.H5P.Linq
     partial void OnIdChanged();
     partial void OnLibraryIdChanging(int value);
     partial void OnLibraryIdChanged();
-    partial void OnReferencedLibraryIdChanging(int value);
-    partial void OnReferencedLibraryIdChanged();
+    partial void OnTypeChanging(int value);
+    partial void OnTypeChanged();
+    partial void OnPathChanging(string value);
+    partial void OnPathChanged();
+    partial void OnOrderChanging(int value);
+    partial void OnOrderChanged();
     #endregion
 		
-		public H5P_Library_Dependency()
+		public H5P_Library_File()
 		{
 			this._H5P_Library = default(EntityRef<H5P_Library>);
-			this._H5P_Library1 = default(EntityRef<H5P_Library>);
 			OnCreated();
 		}
 		
@@ -926,31 +1189,67 @@ namespace Dnote.H5P.Linq
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ReferencedLibraryId", DbType="Int NOT NULL")]
-		public int ReferencedLibraryId
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Type", DbType="Int NOT NULL")]
+		public int Type
 		{
 			get
 			{
-				return this._ReferencedLibraryId;
+				return this._Type;
 			}
 			set
 			{
-				if ((this._ReferencedLibraryId != value))
+				if ((this._Type != value))
 				{
-					if (this._H5P_Library1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnReferencedLibraryIdChanging(value);
+					this.OnTypeChanging(value);
 					this.SendPropertyChanging();
-					this._ReferencedLibraryId = value;
-					this.SendPropertyChanged("ReferencedLibraryId");
-					this.OnReferencedLibraryIdChanged();
+					this._Type = value;
+					this.SendPropertyChanged("Type");
+					this.OnTypeChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Library_Dependency", Storage="_H5P_Library", ThisKey="LibraryId", OtherKey="Id", IsForeignKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Path", DbType="VarChar(256) NOT NULL", CanBeNull=false)]
+		public string Path
+		{
+			get
+			{
+				return this._Path;
+			}
+			set
+			{
+				if ((this._Path != value))
+				{
+					this.OnPathChanging(value);
+					this.SendPropertyChanging();
+					this._Path = value;
+					this.SendPropertyChanged("Path");
+					this.OnPathChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Name="[Order]", Storage="_Order", DbType="Int NOT NULL")]
+		public int Order
+		{
+			get
+			{
+				return this._Order;
+			}
+			set
+			{
+				if ((this._Order != value))
+				{
+					this.OnOrderChanging(value);
+					this.SendPropertyChanging();
+					this._Order = value;
+					this.SendPropertyChanged("Order");
+					this.OnOrderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Library_File", Storage="_H5P_Library", ThisKey="LibraryId", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
 		public H5P_Library H5P_Library
 		{
 			get
@@ -967,12 +1266,12 @@ namespace Dnote.H5P.Linq
 					if ((previousValue != null))
 					{
 						this._H5P_Library.Entity = null;
-						previousValue.H5P_Library_Dependencies.Remove(this);
+						previousValue.H5P_Library_Files.Remove(this);
 					}
 					this._H5P_Library.Entity = value;
 					if ((value != null))
 					{
-						value.H5P_Library_Dependencies.Add(this);
+						value.H5P_Library_Files.Add(this);
 						this._LibraryId = value.Id;
 					}
 					else
@@ -980,40 +1279,6 @@ namespace Dnote.H5P.Linq
 						this._LibraryId = default(int);
 					}
 					this.SendPropertyChanged("H5P_Library");
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="H5P_Library_H5P_Library_Dependency1", Storage="_H5P_Library1", ThisKey="ReferencedLibraryId", OtherKey="Id", IsForeignKey=true)]
-		public H5P_Library H5P_Library1
-		{
-			get
-			{
-				return this._H5P_Library1.Entity;
-			}
-			set
-			{
-				H5P_Library previousValue = this._H5P_Library1.Entity;
-				if (((previousValue != value) 
-							|| (this._H5P_Library1.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._H5P_Library1.Entity = null;
-						previousValue.H5P_Library_Dependencies1.Remove(this);
-					}
-					this._H5P_Library1.Entity = value;
-					if ((value != null))
-					{
-						value.H5P_Library_Dependencies1.Add(this);
-						this._ReferencedLibraryId = value.Id;
-					}
-					else
-					{
-						this._ReferencedLibraryId = default(int);
-					}
-					this.SendPropertyChanged("H5P_Library1");
 				}
 			}
 		}

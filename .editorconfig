@@ -1,0 +1,25 @@
+﻿[*.cs]
+
+# IDE0019: Use pattern matching
+csharp_style_pattern_matching_over_as_with_null_check = true:silent
+
+# IDE0020: Use pattern matching
+dotnet_diagnostic.IDE0020.severity = silent
+
+# IDE0066: Convert switch statement to expression
+csharp_style_prefer_switch_expression = true:silent
+
+# CA1062: Validate arguments of public methods
+dotnet_diagnostic.CA1062.severity = none
+
+# CA1303: Do not pass literals as localized parameters
+dotnet_diagnostic.CA1303.severity = none
+
+# CA1034: Nested types should not be visible
+dotnet_diagnostic.CA1034.severity = none
+
+# CA1305: Specify IFormatProvider
+dotnet_diagnostic.CA1305.severity = none
+
+# CA1031: Do not catch general exception types
+dotnet_diagnostic.CA1031.severity = none

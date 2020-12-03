@@ -12,7 +12,7 @@ namespace Dnote.H5P.Dto
 
         public string[] EmbedTypes { get; set; } = null!;
 
-        public string Licence { get; set; } = null!;
+        public string License { get; set; } = null!;
 
         public string DefaultLanguage { get; set; } = null!;
 
@@ -21,8 +21,21 @@ namespace Dnote.H5P.Dto
             public string Path { get; set; } = null!;
         }
 
+        public class Version
+        {
+            public int MajorVersion { get; set; }
+            
+            public int MinorVersion { get; set; }
+        }
+
         public class Library
         {
+            public string MachineName { get; set; } = null!;
+
+            public int MajorVersion { get; set; }
+
+            public int MinorVersion { get; set; }
+
             public string Title { get; set; } = null!;
             
             public string Description { get; set; } = null!;
@@ -33,7 +46,9 @@ namespace Dnote.H5P.Dto
 
             public string Author { get; set; } = null!;
 
-            public string Licence { get; set; } = null!;
+            public string License { get; set; } = null!;
+
+            public Version? CoreApi { get; set; } = null!;
 
             public IEnumerable<LibraryFile> PreloadedJs { get; set; } = null!;
 
