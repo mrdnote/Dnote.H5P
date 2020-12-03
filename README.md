@@ -25,3 +25,4 @@ H5P implementation for .NET (Standard 2.0)
   - Insert the H5P content placeholder using @Html.H5PContent(...)
   - Insert the H5P script using @Html.H5PScript(...)
   - Insert the H5P script files using @Html.H5PJsIncludes(...)
+- An example on how to upload a H5P content file can be found in Dnote.H5P.NetFW.TestWebSite.HomeController.Index (the POST action).
