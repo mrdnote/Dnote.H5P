@@ -50,9 +50,9 @@ namespace Dnote.H5P.Dto
 
             public Version? CoreApi { get; set; } = null!;
 
-            public IEnumerable<LibraryFile> PreloadedJs { get; set; } = null!;
+            public IEnumerable<LibraryFile>? PreloadedJs { get; set; } = null!;
 
-            public IEnumerable<LibraryFile> PreloadedCss { get; set; } = null!;
+            public IEnumerable<LibraryFile>? PreloadedCss { get; set; } = null!;
 
             public IEnumerable<Dependency>? PreloadedDependencies { get; set; }
         }

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Dnote.H5P.Enums;
 
 namespace Dnote.H5P
 {

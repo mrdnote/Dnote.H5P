@@ -1,10 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Compression;
 using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
 using Dnote.H5P.Dto;
-using Dnote.H5P.Enums;
 
 namespace Dnote.H5P
 {
@@ -38,6 +38,8 @@ namespace Dnote.H5P
             var h5pjsonString = h5pjsonStream.ReadToEnd();
             var h5pJson = JsonConvert.DeserializeObject<H5PJsonDto>(h5pjsonString);
 
+            var content = ImportContent(contentId, zip, h5pJson);
+
             // Read H5P content to in-memory objects and also store resources in cloud or filesystem.
             if (h5pJson.PreloadedDependencies != null)
             {
@@ -49,7 +51,32 @@ namespace Dnote.H5P
             }
 
             // Store content item in database or whatever storage metadata agent prefers.
-            _metaDataAgent.StoreContent(h5pJson, contentId);
+            _metaDataAgent.LoadContent(new [] { contentId });
+            _metaDataAgent.StoreContentItem(h5pJson, contentId, content);
+            _metaDataAgent.SaveContent();
+        }
+
+        /// <summary>
+        /// Store the content items's files and return the content json of the item.
+        /// </summary>
+        private string ImportContent(string contentId, ZipArchive zip, H5PJsonDto h5pJson)
+        {
+            var contentEntries = zip.Entries.Where(e => e.FullName.StartsWith("content"));
+
+            foreach (var entry in contentEntries)
+            {
+                StoreContentFile(contentId, entry.FullName, zip);
+            }
+
+            var contentContentEntry = zip.Entries.FirstOrDefault(e => e.FullName == "content/content.json");
+            if (contentContentEntry == null)
+            {
+                throw new Exception("Content item does not contain the content.json file!");
+            }
+
+            using var stream = contentContentEntry.Open();
+            using var reader = new StreamReader(stream, Encoding.Default);
+            return reader.ReadToEnd();
         }
 
         private H5PJsonDto.Library ImportDependencyLibrary(H5PJsonDto.Dependency dependency, ZipArchive zip, H5PJsonDto h5pJson)
@@ -59,8 +86,9 @@ namespace Dnote.H5P
             // TODO: only proceed if patch version is higher than stored patch version
 
             var libraryEntry = zip.GetEntry(dirName + "/" + "library.json");
-            using var libraryStream = new StreamReader(libraryEntry.Open(), Encoding.Default);
-            var libraryString = libraryStream.ReadToEnd();
+            using var libraryStream = libraryEntry.Open();
+            using var reader = new StreamReader(libraryStream, Encoding.Default);
+            var libraryString = reader.ReadToEnd();
             var libraryJson = JsonConvert.DeserializeObject<H5PJsonDto.Library>(libraryString);
 
             if (libraryJson.PreloadedDependencies != null)
@@ -101,6 +129,14 @@ namespace Dnote.H5P
         {
             var entry = zip.GetEntry(fileName);
             using var stream = entry.Open();
+            _storageAgent.StoreFile(stream, fileName);
+        }
+
+        private void StoreContentFile(string contentId, string fileName, ZipArchive zip)
+        {
+            var entry = zip.GetEntry(fileName);
+            using var stream = entry.Open();
+            fileName = Path.Combine("content", contentId, fileName.Substring(fileName.IndexOf("/") + 1));
             _storageAgent.StoreFile(stream, fileName);
         }
     }

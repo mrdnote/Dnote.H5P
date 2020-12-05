@@ -13,35 +13,34 @@
         <p>H5P Test WebSite for the .NET Framework 4.7.2</p>
     </div>
 
-    <h2>Content items</h2>
-
-    if (!Model.ContentItems.Any())
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <em>No content items uploaded...</em>
-            </div>
-        </div>
-    }
-
-    foreach (var item in Model.ContentItems)
-    {
-        <div class="row">
-            <div class="col-md-12">
-                <a href="@Html.Raw(Url.Action(nameof(HomeController.Exercise), "Home", new { Id = item.Key }))">@item.Value</a>
-            </div>
-        </div>
-    }
-
-    <h2>Upload item</h2>
-
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-6">
+            <div class="well">
+                <h2>Uploaded content items</h2>
 
-            <p>Upload a .h5p content item here</p>
-            <input type="file" name="File" />
-            <button type="submit" class="btn btn-primary">Upload</button>
+                @if (!Model.ContentItems.Any())
+                {
+                    <em>No content items uploaded...</em>
+                }
 
+                @foreach (var item in Model.ContentItems)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="@Html.Raw(Url.Action(nameof(HomeController.Exercise), "Home", new { Id = item }))">@item</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="well">
+                <h2>Add content item</h2>
+                <p>Upload a .h5p content item here</p>
+                <input type="file" name="File" />
+                <button type="submit" class="btn btn-primary pull-right">Upload</button>
+                <div class="clearfix"></div>
+            </div>
         </div>
     </div>
 }

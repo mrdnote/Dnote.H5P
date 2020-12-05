@@ -3,20 +3,17 @@ using System;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Dnote.H5P;
 using Dnote.H5P.Enums;
-using Dnote.H5P.NetFW.Linq2Sql;
 
 namespace Dnote.H5P.Test
 {
     [TestClass]
     public class H5PImporterTests
     {
-        private H5PFakeDataContext _context = null!;
-
         [TestInitialize()]
         public void Initialize() 
         {
-            _context = new H5PFakeDataContext();
         }
 
         [TestMethod]
@@ -24,15 +21,20 @@ namespace Dnote.H5P.Test
         {
             var fileName = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "TestFiles\\test-mc-1291177782275013467.h5p");
             var targetPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "ImportFiles");
+            var metaDataPath = Path.Combine(targetPath, "MetaData");
             if (Directory.Exists(targetPath))
             {
                 Directory.Delete(targetPath, true);
+                while (Directory.Exists(targetPath))
+                {
+                    System.Threading.Thread.Sleep(10);
+                }
             }
-            Directory.CreateDirectory(targetPath);
+            Directory.CreateDirectory(metaDataPath);
 
             var storageAgent = new H5PFileStorageAgent(targetPath);
-            var databaseAgent = new H5PLinqMetaDataAgent(_context, "ImportFiles");
-            var importer = new H5PImporter(storageAgent, databaseAgent);
+            var metaDataAgent = new H5PFileMetaDataAgent("ImportFiles", metaDataPath);
+            var importer = new H5PImporter(storageAgent, metaDataAgent);
 
             importer.Import(fileName);
 
@@ -43,34 +45,13 @@ namespace Dnote.H5P.Test
 
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "FontAwesome-4.5", "fontawesome-webfont.eot")));
 
-            var item = _context.Repository<H5P_ContentItem>().FirstOrDefault(i => i.ContentId == "test-mc-1291177782275013467.h5p");
-
-            Assert.IsNotNull(item);
-            Assert.AreEqual("en", item.DefaultLanguage);
-
-            var embedTypes = _context.Repository<H5P_ContentItem_EmbedType>().Where(i => i.H5P_ContentItem.ContentId == "test-mc-1291177782275013467.h5p");
-
-            Assert.AreEqual(1, embedTypes.Count());
-            Assert.AreEqual("div", embedTypes.First().Value);
-
-            var contentLibraries = _context.Repository<H5P_ContentItem_Library>().Where(cl => cl.H5P_ContentItem.ContentId == "test-mc-1291177782275013467.h5p").OrderBy(cl => cl.Order);
-
-            Assert.AreEqual(9, contentLibraries.Count());
-
-            var order = 0;
-            foreach (var contentLibrary in contentLibraries)
-            {
-                Assert.AreEqual(order, contentLibrary.Order);
-                order++;
-            }
-
-            var jsIncludeFiles = databaseAgent.GetIncludeFilesForContentItems(new string[] { "test-mc-1291177782275013467.h5p" }, FileTypes.Js);
+            var jsIncludeFiles = metaDataAgent.GetIncludeFilesForContentItems(FileTypes.Js);
 
             Assert.AreEqual(20, jsIncludeFiles.Count());
             Assert.AreEqual("ImportFiles/EmbeddedJS-1.0/js/ejs_production.js", jsIncludeFiles.First());
             Assert.AreEqual("ImportFiles/EmbeddedJS-1.0/js/ejs_viewhelpers.js", jsIncludeFiles.Skip(1).First());
 
-            var cssIncludeFiles = databaseAgent.GetIncludeFilesForContentItems(new string[] { "test-mc-1291177782275013467.h5p" }, FileTypes.Css);
+            var cssIncludeFiles = metaDataAgent.GetIncludeFilesForContentItems(FileTypes.Css);
 
             Assert.AreEqual(18, cssIncludeFiles.Count());
             Assert.AreEqual("ImportFiles/FontAwesome-4.5/h5p-font-awesome.min.css", cssIncludeFiles.First());

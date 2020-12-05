@@ -1,20 +1,18 @@
 ﻿#nullable enable
+using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using Dnote.H5P.NetFW.Linq2Sql;
 using Dnote.H5P.NetFW.TestWebSite.Models;
 
 namespace Dnote.H5P.NetFW.TestWebSite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly H5PDataContext _context;
-
         public HomeController()
         {
-            _context = new H5PDataContext(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         }
 
         [HttpGet]
@@ -22,7 +20,15 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
         {
             var model = new IndexViewModel();
 
-            model.ContentItems = _context.Repository<H5P_ContentItem>().OrderBy(c => c.Title).ToDictionary(c => c.ContentId, c => c.Title);
+            var dirs = new string[0];
+
+            var dir = Server.MapPath("~/Content/content");
+            if (Directory.Exists(dir))
+            {
+                dirs = Directory.GetDirectories(dir);
+            }
+
+            model.ContentItems = dirs.Select(d => Path.GetFileNameWithoutExtension(d));
 
             return View(model);
         }
@@ -32,9 +38,11 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
         {
             if (file != null)
             {
-                var storageAgent = new H5PFileStorageAgent(Server.MapPath("~/Content"));
-                var metaDataAgent = new H5PLinqMetaDataAgent(_context, Url.Content("~/Content"));
+                var storagePath = Server.MapPath("~/Content");
+                var storageAgent = new H5PFileStorageAgent(storagePath);
+                var metaDataAgent = new H5PFileMetaDataAgent(Url.Content("~/Content"), storagePath);
                 var importer = new H5PImporter(storageAgent, metaDataAgent);
+
                 importer.Import(file.InputStream, file.FileName.Replace('.', '-').Replace(' ', '-'));
             }
 
@@ -43,15 +51,18 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
 
         public ActionResult Exercise(string id)
         {
-            var contentItem = _context.Repository<H5P_ContentItem>().First(c => c.ContentId == id);
+            var storagePath = Server.MapPath("~/Content");
+            var metaDataAgent = new H5PFileMetaDataAgent(Url.Content("~/Content"), storagePath);
 
-            var h5pMetaDataAgent = new H5PLinqMetaDataAgent(_context, Url.Content("~/Content"));
+            metaDataAgent.LoadContent(new[] { id });
+
+            var contentItem = metaDataAgent.GetContentItem(id);
 
             var model = new ExerciseViewModel
             {
                 Id = id,
                 Title = contentItem.Title,
-                H5PMetaDataAgent = h5pMetaDataAgent
+                H5PMetaDataAgent = metaDataAgent
             };
 
             return View(model);

@@ -217,10 +217,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dnote.H5P.Linq\Dnote.H5P.NetFW.Linq2Sql.csproj">
-      <Project>{395a4897-773a-494f-bc72-17532866ae50}</Project>
-      <Name>Dnote.H5P.NetFW.Linq2Sql</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Dnote.H5P.NetFW.UI\Dnote.H5P.NetFW.UI.csproj">
       <Project>{e75e5be7-de4a-4c82-a746-c0a7b1f01412}</Project>
       <Name>Dnote.H5P.NetFW.UI</Name>

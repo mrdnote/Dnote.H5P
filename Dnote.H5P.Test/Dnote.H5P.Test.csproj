@@ -56,7 +56,6 @@
     <Reference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="H5PFakeDataContext.cs" />
     <Compile Include="H5PImporterTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -67,10 +66,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dnote.H5P.Linq\Dnote.H5P.NetFW.Linq2Sql.csproj">
-      <Project>{395a4897-773a-494f-bc72-17532866ae50}</Project>
-      <Name>Dnote.H5P.NetFW.Linq2Sql</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Dnote.H5P\Dnote.H5P.csproj">
       <Project>{3dbc3197-f8c5-46bc-8494-39af55a7361b}</Project>
       <Name>Dnote.H5P</Name>

@@ -4,6 +4,6 @@ namespace Dnote.H5P.NetFW.TestWebSite.Models
 {
     public class IndexViewModel
     {
-        public IDictionary<string, string> ContentItems { get; set; }
+        public IEnumerable<string> ContentItems { get; set; } = null!;
     }
 }
