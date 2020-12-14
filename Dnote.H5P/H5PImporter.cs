@@ -5,6 +5,7 @@ using System.Text;
 using System.Linq;
 using Newtonsoft.Json;
 using Dnote.H5P.Dto;
+using System.Threading.Tasks;
 
 namespace Dnote.H5P
 {
@@ -19,39 +20,39 @@ namespace Dnote.H5P
             _metaDataAgent = databaseAgent;
         }
 
-        public void Import(string fileName)
+        public async Task Import(string fileName)
         {
             using var fileStream = new FileStream(fileName, FileMode.Open);
-            Import(fileStream, Path.GetFileName(fileName));
+            await Import(fileStream, Path.GetFileName(fileName));
         }
 
-        public void Import(Stream? stream, string contentId)
+        public async Task Import(Stream? stream, string contentId)
         {
             using var zip = new ZipArchive(stream);
-            Import(zip, contentId);
+            await Import(zip, contentId);
         }
 
-        public void Import(ZipArchive zip, string contentId)
+        public async Task Import(ZipArchive zip, string contentId)
         {
             var h5pjsonEntry = zip.GetEntry("h5p.json");
             using var h5pjsonStream = new StreamReader(h5pjsonEntry.Open(), Encoding.Default);
             var h5pjsonString = h5pjsonStream.ReadToEnd();
             var h5pJson = JsonConvert.DeserializeObject<H5PJsonDto>(h5pjsonString);
 
-            var content = ImportContent(contentId, zip, h5pJson);
+            var content = await ImportContent(contentId, zip, h5pJson);
 
             // Read H5P content to in-memory objects and also store resources in cloud or filesystem.
             if (h5pJson.PreloadedDependencies != null)
             {
                 foreach (var dependency in h5pJson.PreloadedDependencies)
                 {
-                    var libraryJson = ImportDependencyLibrary(dependency, zip, h5pJson);
+                    var libraryJson = await ImportDependencyLibrary(dependency, zip, h5pJson);
                     dependency.Library = libraryJson;
                 }
             }
 
             // Store content item in database or whatever storage metadata agent prefers.
-            _metaDataAgent.LoadContent(new [] { contentId });
+            await _metaDataAgent.LoadContentAsync(new [] { contentId });
             _metaDataAgent.StoreContentItem(h5pJson, contentId, content);
             _metaDataAgent.SaveContent();
         }
@@ -59,13 +60,13 @@ namespace Dnote.H5P
         /// <summary>
         /// Store the content items's files and return the content json of the item.
         /// </summary>
-        private string ImportContent(string contentId, ZipArchive zip, H5PJsonDto h5pJson)
+        private async Task<string> ImportContent(string contentId, ZipArchive zip, H5PJsonDto h5pJson)
         {
             var contentEntries = zip.Entries.Where(e => e.FullName.StartsWith("content"));
 
             foreach (var entry in contentEntries)
             {
-                StoreContentFile(contentId, entry.FullName, zip);
+                await StoreContentFile(contentId, entry.FullName, zip);
             }
 
             var contentContentEntry = zip.Entries.FirstOrDefault(e => e.FullName == "content/content.json");
@@ -79,7 +80,7 @@ namespace Dnote.H5P
             return reader.ReadToEnd();
         }
 
-        private H5PJsonDto.Library ImportDependencyLibrary(H5PJsonDto.Dependency dependency, ZipArchive zip, H5PJsonDto h5pJson)
+        private async Task<H5PJsonDto.Library> ImportDependencyLibrary(H5PJsonDto.Dependency dependency, ZipArchive zip, H5PJsonDto h5pJson)
         {
             var dirName = $"{dependency.MachineName}-{dependency.MajorVersion}.{dependency.MinorVersion}";
 
@@ -104,7 +105,7 @@ namespace Dnote.H5P
                     }
                     else // import it on the spot
                     {
-                        var library = ImportDependencyLibrary(libraryDependency, zip, h5pJson);
+                        var library = await ImportDependencyLibrary(libraryDependency, zip, h5pJson);
                         libraryDependency.Library = library;
 
                         // also save the library to the root dependency, if it exists in the root
@@ -119,25 +120,25 @@ namespace Dnote.H5P
             var entries = zip.Entries.Where(e => e.FullName.StartsWith(dirName.TrimEnd('/') + "/"));
             foreach (var entry in entries)
             {
-                StoreLibraryFile(entry.FullName, zip);
+                await StoreLibraryFile(entry.FullName, zip);
             }
 
             return libraryJson;
         }
 
-        private void StoreLibraryFile(string fileName, ZipArchive zip)
+        private async Task StoreLibraryFile(string fileName, ZipArchive zip)
         {
             var entry = zip.GetEntry(fileName);
             using var stream = entry.Open();
-            _storageAgent.StoreFile(stream, fileName);
+            await _storageAgent.StoreFileAsync(stream, fileName);
         }
 
-        private void StoreContentFile(string contentId, string fileName, ZipArchive zip)
+        private async Task StoreContentFile(string contentId, string fileName, ZipArchive zip)
         {
             var entry = zip.GetEntry(fileName);
             using var stream = entry.Open();
             fileName = Path.Combine("content", contentId, fileName.Substring(fileName.IndexOf("/") + 1));
-            _storageAgent.StoreFile(stream, fileName);
+            await _storageAgent.StoreFileAsync(stream, fileName);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Threading.Tasks;
 
 namespace Dnote.H5P
 {
@@ -11,14 +12,14 @@ namespace Dnote.H5P
             _path = path;
         }
 
-        public override void StoreFile(Stream stream, string fileName)
+        public override async Task StoreFileAsync(Stream stream, string fileName)
         {
             var filePath = Path.Combine(_path, fileName);
             var filePathDir = Path.GetDirectoryName(filePath);
             Directory.CreateDirectory(filePathDir);
 
             using var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write);
-            stream.CopyTo(fileStream);
+            await stream.CopyToAsync(fileStream);
         }
     }
 }

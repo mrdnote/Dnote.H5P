@@ -14,6 +14,14 @@
     </div>
 
     <div class="row">
+        <div class="col-md-12">
+            <div class="well">
+                @Html.DropDownListFor(m => m.Storage, new SelectList(Model.Storages, "Value", "Text", Model.Storage), new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
         <div class="col-md-6">
             <div class="well">
                 <h2>Uploaded content items</h2>
@@ -27,7 +35,7 @@
                 {
                     <div class="row">
                         <div class="col-md-12">
-                            <a href="@Html.Raw(Url.Action(nameof(HomeController.Exercise), "Home", new { Id = item }))">@item</a>
+                            <a href="@Html.Raw(Url.Action(nameof(HomeController.Exercise), "Home", new { Id = item, Storage = Model.Storage }))">@item</a>
                         </div>
                     </div>
                 }
@@ -43,4 +51,13 @@
             </div>
         </div>
     </div>
+}
+
+@section scripts {
+    <script>
+        $('#Storage').change(function ()
+        {
+            document.location = document.location.href.setUrlParam('storage', $('#Storage').val());
+        });
+    </script>
 }

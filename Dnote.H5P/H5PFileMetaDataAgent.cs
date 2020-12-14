@@ -1,24 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Dnote.H5P.Dto;
 
 namespace Dnote.H5P
 {
-    public class H5PFileMetaDataAgent : H5PMetaDataAgent
+    public abstract class H5PFileMetaDataAgent : H5PMetaDataAgent
     {
         private readonly List<H5PContentItemFileDto> _fileDtos = new List<H5PContentItemFileDto>();
 
-        private readonly string _filePath;
-
-        public H5PFileMetaDataAgent(string pathPrefix, string filePath)
+        public H5PFileMetaDataAgent(string? pathPrefix)
             : base(pathPrefix)
         {
-            _filePath = filePath;
         }
 
-        protected override void InnerLoadContent(IEnumerable<string> contentIds)
+        protected async override Task InnerLoadContentAsync(IEnumerable<string> contentIds)
         {
             _fileDtos.Clear();
 
@@ -27,10 +25,10 @@ namespace Dnote.H5P
                 var metaDataPath = GetMetaDataPath(contentId);
                 H5PContentItemFileDto fileDto;
 
-                if (File.Exists(metaDataPath))
-                {
-                    var jsonString = File.ReadAllText(metaDataPath);
+                var jsonString = await ReadContentAsync(metaDataPath);
 
+                if (jsonString != null)
+                {
                     fileDto = JsonConvert.DeserializeObject<H5PContentItemFileDto>(jsonString);
                 }
                 else
@@ -61,8 +59,14 @@ namespace Dnote.H5P
 
                 var jsonString = JsonConvert.SerializeObject(fileDto);
 
-                File.WriteAllText(metaDataPath, jsonString);
+                StoreContentAsync(metaDataPath, jsonString);
             }
+        }
+
+        public void SetVisiblity(string contentId, bool visible)
+        {
+            var fileDto = _fileDtos.FirstOrDefault(f => f.ContentId == contentId);
+            fileDto.Render = visible;
         }
 
         protected override void UpdateLibraryInContent(string contentId, string machineName, int majorVersion, int minorVersion, IEnumerable<string>? jsFiles, IEnumerable<string>? cssFiles, int order,
@@ -123,9 +127,19 @@ namespace Dnote.H5P
         {
         }
 
-        private string GetMetaDataPath(string contentId)
+        protected abstract string GetMetaDataPath(string contentId);
+
+        /// <summary>
+        /// Reads the content of the specified file as a string. Returns null if the file does not exist.
+        /// </summary>
+        protected abstract Task<string?> ReadContentAsync(string path);
+
+        protected abstract Task StoreContentAsync(string path, string value);
+
+        protected override void InnerSetUserContent(string contentId, string? userContent)
         {
-            return Path.Combine(_filePath, "content", contentId, "metadata.json");
+            var fileDto = _fileDtos.FirstOrDefault(f => f.ContentId == contentId);
+            fileDto.UserContent = userContent;
         }
     }
 }

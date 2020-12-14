@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnote.H5P.NetFW.UI", "Dnote
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnote.H5P.NetFW.TestWebSite", "Dnote.H5P.NetFW.TestWebSite\Dnote.H5P.NetFW.TestWebSite.csproj", "{EB1EE6C8-586C-4D6C-A6E7-8C4E033C041F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dnote.H5P.NetFW.Api", "Dnote.H5P.NetFW.Api\Dnote.H5P.NetFW.Api.csproj", "{14F632BA-3249-4C0C-A03F-DF5C8E62A5A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{EB1EE6C8-586C-4D6C-A6E7-8C4E033C041F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB1EE6C8-586C-4D6C-A6E7-8C4E033C041F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB1EE6C8-586C-4D6C-A6E7-8C4E033C041F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14F632BA-3249-4C0C-A03F-DF5C8E62A5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14F632BA-3249-4C0C-A03F-DF5C8E62A5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14F632BA-3249-4C0C-A03F-DF5C8E62A5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14F632BA-3249-4C0C-A03F-DF5C8E62A5A1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{E8012235-11BC-4DFD-97CD-58D7B538093B} = {8A69EC0B-18EB-48A4-9E29-ABD733453EAD}
 		{E75E5BE7-DE4A-4C82-A746-C0A7B1F01412} = {0B1F57AC-4859-4C77-9010-B511BDF5EA52}
 		{EB1EE6C8-586C-4D6C-A6E7-8C4E033C041F} = {8A69EC0B-18EB-48A4-9E29-ABD733453EAD}
+		{14F632BA-3249-4C0C-A03F-DF5C8E62A5A1} = {0B1F57AC-4859-4C77-9010-B511BDF5EA52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {29F8C190-D699-4609-84E1-16C133AE92E3}

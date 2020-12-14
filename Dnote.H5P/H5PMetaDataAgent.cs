@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Dnote.H5P.Dto;
 using Dnote.H5P.Enums;
 
@@ -11,18 +12,18 @@ namespace Dnote.H5P
     /// </summary>
     public abstract class H5PMetaDataAgent
     {
-        private readonly string _pathPrefix;
+        private readonly string? _pathPrefix = null;
 
         #region Public methods
 
-        public H5PMetaDataAgent(string pathPrefix)
+        public H5PMetaDataAgent(string? pathPrefix)
         {
             _pathPrefix = pathPrefix;
         }
 
-        public void LoadContent(IEnumerable<string> contentIds)
+        public async Task LoadContentAsync(IEnumerable<string> contentIds)
         {
-            InnerLoadContent(contentIds);
+            await InnerLoadContentAsync(contentIds);
         }
 
         public void StoreContentItem(H5PJsonDto h5pJson, string contentId, string content)
@@ -60,6 +61,13 @@ namespace Dnote.H5P
             {
                 ProcessLibrary(dependency.Library, contentId, touchedLibraries, mainLibrary);
             }
+        }
+
+        public string GetPrefix()
+        {
+            var result = GetFileSystemPrefix() + _pathPrefix;
+
+            return result.TrimEnd('/');
         }
 
         private void ProcessLibrary(H5PJsonDto.Library library, string contentId, List<(string, int, int)> touchedLibraries, string mainLibrary)
@@ -104,13 +112,15 @@ namespace Dnote.H5P
                 pathPrefix = pathPrefix.TrimEnd('/') + "/";
             }
 
+            var fileSystemPrefix = GetFileSystemPrefix();
+
             if (fileType == FileTypes.Js)
             {
-                return libraries.SelectMany(l => l.JsFiles.Select(f => $"{pathPrefix}{l.MachineName}-{l.MajorVersion}.{l.MinorVersion}/{f}")).Distinct();
+                return libraries.SelectMany(l => l.JsFiles.Select(f => $"{fileSystemPrefix}{pathPrefix}{l.MachineName}-{l.MajorVersion}.{l.MinorVersion}/{f}")).Distinct();
             }
             else if (fileType == FileTypes.Css)
             {
-                return libraries.SelectMany(l => l.CssFiles.Select(f => $"{pathPrefix}{l.MachineName}-{l.MajorVersion}.{l.MinorVersion}/{f}")).Distinct();
+                return libraries.SelectMany(l => l.CssFiles.Select(f => $"{fileSystemPrefix}{pathPrefix}{l.MachineName}-{l.MajorVersion}.{l.MinorVersion}/{f}")).Distinct();
             }
             else
             {
@@ -118,9 +128,16 @@ namespace Dnote.H5P
             }
         }
 
-        protected abstract void InnerLoadContent(IEnumerable<string> contentIds);
+        public void SetUserState(string contentId, string? userContent)
+        {
+            InnerSetUserContent(contentId, userContent);
+        }
+
+        protected abstract Task InnerLoadContentAsync(IEnumerable<string> contentIds);
 
         protected abstract void InnerStoreContentItem(H5PJsonDto h5pJson, string contentId, string content);
+
+        protected abstract void InnerSetUserContent(string contentId, string? userContent);
 
         protected abstract IEnumerable<H5PContentItemFileDto> InnerGetContentItems();
 
@@ -135,6 +152,8 @@ namespace Dnote.H5P
             bool isMainLibrary);
 
         protected abstract IEnumerable<H5PLibraryForContentItemDto> GetLibrariesForContentItems();
+
+        protected abstract string? GetFileSystemPrefix();
     }
 }
 

@@ -10,6 +10,10 @@ namespace Dnote.H5P.Dto
 
         public string Content { get; set; } = null!;
 
+        public string? UserContent { get; set; }
+
+        public bool Render { get; set; } = true;
+
         public class Library
         {
             public string MachineName { get; set; } = null!;

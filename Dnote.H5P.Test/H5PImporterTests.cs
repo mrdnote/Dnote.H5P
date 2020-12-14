@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Dnote.H5P;
 using Dnote.H5P.Enums;
+using System.Threading.Tasks;
 
 namespace Dnote.H5P.Test
 {
@@ -17,11 +18,11 @@ namespace Dnote.H5P.Test
         }
 
         [TestMethod]
-        public void ImportTest()
+        public async Task ImportTest()
         {
             var fileName = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "TestFiles\\test-mc-1291177782275013467.h5p");
             var targetPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "ImportFiles");
-            var metaDataPath = Path.Combine(targetPath, "MetaData");
+            //var metaDataPath = Path.Combine(targetPath, "MetaData");
             if (Directory.Exists(targetPath))
             {
                 Directory.Delete(targetPath, true);
@@ -30,13 +31,13 @@ namespace Dnote.H5P.Test
                     System.Threading.Thread.Sleep(10);
                 }
             }
-            Directory.CreateDirectory(metaDataPath);
+            Directory.CreateDirectory(targetPath);
 
             var storageAgent = new H5PFileStorageAgent(targetPath);
-            var metaDataAgent = new H5PFileMetaDataAgent("ImportFiles", metaDataPath);
+            var metaDataAgent = new H5PPhysicalFileMetaDataAgent("ImportFiles", targetPath);
             var importer = new H5PImporter(storageAgent, metaDataAgent);
 
-            importer.Import(fileName);
+            await importer.Import(fileName);
 
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "EmbeddedJS-1.0", "js", "ejs_production.js")));
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "EmbeddedJS-1.0", "js", "ejs_viewhelpers.js")));

@@ -1,5 +1,7 @@
 ﻿@using Dnote.H5P.NetFW.UI
 @using Dnote.H5P.NetFW.TestWebSite.Models
+@using Dnote.H5P.NetFW.TestWebSite.App_Start
+
 @model ExerciseViewModel
 @{
     ViewBag.Title = "H5P Test WebSite";
@@ -11,22 +13,37 @@
     @Html.H5PCssIncludes(Model.H5PMetaDataAgent)
 }
 
-<div class="jumbotron">
-    <h1>@Model.Title</h1>
-    <p>H5P Test WebSite for the .NET Framework 4.7.2</p>
-</div>
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.HiddenFor(m => m.State)
+    @Html.HiddenFor(m => m.Storage)
 
-<div class="row">
-    <div class="col-md-12">
-
-        <div class="h5p-content" id="@Model.Id" data-content-id="@Model.Id"></div>
-
+    <div class="jumbotron">
+        <h1>@Model.Title</h1>
+        <p>H5P Test WebSite for the .NET Framework 4.7.2</p>
     </div>
-</div>
+
+    <div class="row">
+        <div class="col-md-12">
+
+            @if (Model.Visible)
+            {
+                <div class="h5p-content" id="@Model.Id" data-content-id="@Model.Id"></div>
+            }
+            else
+            {
+                <div>You already submitted this quiz...</div>
+            }
+
+        </div>
+    </div>
+
+    <button id="SaveButton" type="submit" class="btn btn-primary disabled" disabled="disabled">Save</button>
+}
 
 @section scripts
 {
-    @Html.H5PScript(Model.H5PMetaDataAgent, Url)
+    @Html.H5PScript(Model.H5PMetaDataAgent, null, 30, Url)
 
     <script src="~/Scripts/jquery.js"></script>
     <script src="~/Scripts/h5p-event-dispatcher.js"></script>
@@ -38,4 +55,68 @@
     <script src="~/Scripts/h5p-x-api.js"></script>
     <script src="~/Scripts/h5p-content-type.js"></script>
     @Html.H5PJsIncludes(Model.H5PMetaDataAgent)
+
+    <script>
+        const contentIds = [];
+        const instances = [];
+
+        // After initialization, put the content items that are previously finished in "solution mode".
+        H5P.externalDispatcher.on('initialized', function (_event)
+        {
+            for (var i = 0; i < instances.length; i++)
+            {
+                const instance = instances[i];
+                if (window.H5PCompleted[instance.contentId])
+                {
+                    if (instance.showSolutions)
+                    {
+                        instance.showSolutions();
+                    }
+                }
+            }
+        });
+
+        H5P.externalDispatcher.on('xAPI', function (event)
+        {
+            // Keep track of instance objects of the content items on this page. The instance object is only passed during xAPI events, so we need this opportunity to get a hold of them.
+            const contentId = event.data.statement.object.definition.extensions['http://h5p.org/x-api/h5p-local-content-id'];
+            if (contentIds.indexOf(contentId) == -1)
+            {
+                contentIds.push(contentId);
+                instances.push(this);
+            }
+
+            let finished = false;
+
+            // If this content item has been completed, store the state of the item in a form field so we can process it in the postback of the page.
+            if (this.getCurrentState)
+            {
+                // Path 1: Process content types that support state
+                const state = this.getCurrentState();
+                const stateJson = JSON.stringify(state);
+                const result = event.data.statement.result;
+
+                if (result)
+                {
+                    $('#@Html.IdFor(m => m.State)').val(stateJson);
+                    finished = true;
+                }
+            }
+            else
+            {
+                // Path 2: Process content types that do not support state
+                if (event.data.statement.verb.id == "http://adlnet.gov/expapi/verbs/completed")
+                {
+                    finished = true;
+                }
+            }
+
+            if (finished)
+            {
+                // Enable the save button, so the user can submit the page.
+                $('#SaveButton').removeClass('disabled');
+                $('#SaveButton').removeAttr('disabled');
+            }
+        });
+    </script>
 }

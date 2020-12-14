@@ -39,8 +39,10 @@ namespace Dnote.H5P.NetFW.UI
             return new MvcHtmlString(sb.ToString());
         }
 
-        public static MvcHtmlString H5PScript(this HtmlHelper helper, H5PMetaDataAgent metaDataAgent, UrlHelper urlHelper)
+        public static MvcHtmlString H5PScript(this HtmlHelper helper, H5PMetaDataAgent metaDataAgent, string apiUrlPrefix, int? saveFreq, UrlHelper urlHelper)
         {
+            _ = helper;
+
             var sb = new StringBuilder();
 
             var items = metaDataAgent.GetContentItems();
@@ -48,18 +50,19 @@ namespace Dnote.H5P.NetFW.UI
             sb.AppendLine("<script>");
 
             var mainScript = $@"
+                window.H5PCompleted = {{}};
                 window.H5PIntegration = {{
                     'baseUrl': 'http://www.mysite.com',     // No trailing slash
-                    'url': '{urlHelper.Content("~/Content/")}',   // Relative to web root
-                    'postUserStatistics': true,             // Only if user is logged in
-                    'ajaxPath': '/path/to/h5p-ajax',        // Only used by older Content Types
+                    'url': '{metaDataAgent.GetPrefix()}',   // Relative to web root
+                    'postUserStatistics': {(apiUrlPrefix != null ? "true" : "false")},             // Only if user is logged in
+                    'ajaxPath': '/{apiUrlPrefix}', // Only used by older Content Types
                     'ajax': {{
                         // Where to post user results
-                        'setFinished': '/interactive-contents/123/results/new',
+                        'setFinished': {(apiUrlPrefix != null ? "'/" + apiUrlPrefix.TrimEnd('/') + "/SetFinished'" : "null")},
                         // Words beginning with : are placeholders
-                        'contentUserData': '/interactive-contents/:contentId/user-data?data_type=:dataType&subContentId=:subContentId'
+                        'contentUserData': {(apiUrlPrefix != null ? "'/" + apiUrlPrefix.TrimEnd('/') + "/UserData/:contentId?data_type=:dataType&subContentId=:subContentId'" : "null")},
                     }},
-                    'saveFreq': 5, // How often current content state should be saved. false to disable.
+                    'saveFreq': {saveFreq?.ToString() ?? "false"}, // How often current content state should be saved. false to disable.
                     'user': {{ // Only if logged in !
                         'name': 'User Name',
                         'mail': 'user@mysite.com'
@@ -106,36 +109,38 @@ namespace Dnote.H5P.NetFW.UI
 
             foreach (var item in items)
             {
-                var script = $@"
-                    window.H5PIntegration.contents['cid-{item.ContentId}'] = {{
-                        'library': '{item.MainLibrary.MachineName} {item.MainLibrary.MajorVersion}.{item.MainLibrary.MinorVersion}', // Library name + major version.minor version
-                        'jsonContent': '{item.Content}',
-                        'fullScreen': false, // No fullscreen support
-                        'exportUrl': '/path/to/download.h5p',
-                        'mainId': 1234,
-                        'url': 'https://mysite.com/h5p/1234',
-                        'title': '{item.Title}',
-                        'contentUserData': {{
-                            0: {{ // Sub ID (0 = main content/no id)
-                                'state': false // => FALSE // Data ID
+                // If userContent is null, the content item has not yet been submitted. If userContent is an empty string, the content item has been submitted, but the content type does not support
+                // state. If userContent is filled, it is filled with the answers the user previously submitted.
+                if (item.Render)
+                {
+                    var script = $@"
+                        const jsonContent = '{item.Content.Replace("\\n", "\\\\n").Replace("\n", "")}';
+                        window.H5PCompleted['{item.ContentId}'] = {(item.UserContent != null ? "true" : "false")};
+                        window.H5PIntegration.contents['cid-{item.ContentId}'] = {{
+                            'library': '{item.MainLibrary.MachineName} {item.MainLibrary.MajorVersion}.{item.MainLibrary.MinorVersion}', // Library name + major version.minor version
+                            'jsonContent': jsonContent,
+                            'fullScreen': false, // No fullscreen support
+                            'exportUrl': '/path/to/download.h5p',
+                            'mainId': 1234,
+                            'url': 'https://mysite.com/h5p/1234',
+                            'title': '{item.Title}',
+                            'contentUserData': {{
+                                0: {{ // Sub ID (0 = main content/no id)
+                                    'state': '{item.UserContent}'
+                                }}
+                            }},
+                            'displayOptions': {{
+                                'frame': true, // Show frame and buttons below H5P
+                                'export': true, // Display download button
+                                'embed': true, // Display embed button
+                                'copyright': true, // Display copyright button
+                                'icon': true // Display H5P icon
                             }}
-                        }},
-                        'displayOptions': {{
-                            'frame': true, // Show frame and buttons below H5P
-                            'export': true, // Display download button
-                            'embed': true, // Display embed button
-                            'copyright': true, // Display copyright button
-                            'icon': true // Display H5P icon
-                        }}
-                    }};
+                        }};
+                    ";
 
-                    $(document).ready(function ()
-                    {{
-                        H5P.init();
-                    }});
-                ";
-
-                sb.AppendLine(script);
+                    sb.AppendLine(script);
+                }
             }
 
             sb.AppendLine("</script>");
