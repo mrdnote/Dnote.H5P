@@ -23,12 +23,6 @@ namespace Dnote.H5P.NetFW.TestWebSite.App_Start
                 new { action = RouteParameter.Optional, id = RouteParameter.Optional }
             );
 
-            config.Routes.MapHttpRoute(
-                DefaultH5PApiRouteName,
-                H5PUrlPrefix + "/{action}/{id}",
-                new { controller = nameof(H5PApiController).Replace("Controller", null), id = RouteParameter.Optional }
-            );
-
             // force json
             var appXmlType = config.Formatters.XmlFormatter.SupportedMediaTypes.FirstOrDefault(t => t.MediaType == "application/xml");
             config.Formatters.XmlFormatter.SupportedMediaTypes.Remove(appXmlType);

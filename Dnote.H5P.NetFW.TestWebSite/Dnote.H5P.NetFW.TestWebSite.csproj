@@ -148,7 +148,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\H5PApiController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Enums\StorageEnum.cs" />
     <Compile Include="Global.asax.cs">
@@ -245,10 +244,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dnote.H5P.NetFW.Api\Dnote.H5P.NetFW.Api.csproj">
-      <Project>{14f632ba-3249-4c0c-a03f-df5c8e62a5a1}</Project>
-      <Name>Dnote.H5P.NetFW.Api</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Dnote.H5P.NetFW.UI\Dnote.H5P.NetFW.UI.csproj">
       <Project>{e75e5be7-de4a-4c82-a746-c0a7b1f01412}</Project>
       <Name>Dnote.H5P.NetFW.UI</Name>
