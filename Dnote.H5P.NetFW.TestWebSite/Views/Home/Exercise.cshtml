@@ -10,12 +10,16 @@
 @section head
 {
     <link rel="stylesheet" href="~/Content/h5p.css" />
+
+    @*The following line renders the style sheets needed by the h5p content items on the page.*@
     @Html.H5PCssIncludes(Model.H5PMetaDataAgent)
 }
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
+    // Postback field: Userstate of the content which is stored when the page is submitted.
     @Html.HiddenFor(m => m.State)
+    // Postback field: The type of storage to use: filesystem or azure.
     @Html.HiddenFor(m => m.Storage)
 
     <div class="jumbotron">
@@ -28,10 +32,12 @@
 
             @if (Model.Visible)
             {
+                // Below is the h5p content item placeholder which is replace by the h5p system.
                 <div class="h5p-content" id="@Model.Id" data-content-id="@Model.Id"></div>
             }
             else
             {
+                // If the content item does not support state, it cannot be displayed in solution mode, therefore hide it when it has been completed.
                 <div>You already submitted this quiz...</div>
             }
 
@@ -43,8 +49,10 @@
 
 @section scripts
 {
+    @*The following line renders the data structures that feed the H5P content.*@
     @Html.H5PScript(Model.H5PMetaDataAgent, null, 30, Url)
 
+    @*The following scripts are copied from the H5P site.*@
     <script src="~/Scripts/jquery.js"></script>
     <script src="~/Scripts/h5p-event-dispatcher.js"></script>
     <script src="~/Scripts/h5p-action-bar.js"></script>
@@ -54,10 +62,14 @@
     <script src="~/Scripts/h5p-x-api-event.js"></script>
     <script src="~/Scripts/h5p-x-api.js"></script>
     <script src="~/Scripts/h5p-content-type.js"></script>
+
+    @*The following line includes all the library scripts needed by the content items on the page.*@
     @Html.H5PJsIncludes(Model.H5PMetaDataAgent)
 
     <script>
+        // List of ids of the content items on the page.
         const contentIds = [];
+        // List of H5P content instances on the page.
         const instances = [];
 
         // After initialization, put the content items that are previously finished in "solution mode".
