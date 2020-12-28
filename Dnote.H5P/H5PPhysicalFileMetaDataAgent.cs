@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 
 namespace Dnote.H5P
 {
@@ -13,7 +12,7 @@ namespace Dnote.H5P
             _filePath = filePath;
         }
 
-        protected override Task<string?> ReadContentAsync(string path)
+        protected override string? ReadContent(string path)
         {
             string? result = null;
 
@@ -22,13 +21,12 @@ namespace Dnote.H5P
                 result = File.ReadAllText(path);
             }
 
-            return Task.FromResult(result);
+            return result;
         }
 
-        protected override Task StoreContentAsync(string path, string value)
+        protected override void StoreContent(string path, string value)
         {
             File.WriteAllText(path, value);
-            return Task.CompletedTask;
         }
 
         protected override string GetMetaDataPath(string contentId)

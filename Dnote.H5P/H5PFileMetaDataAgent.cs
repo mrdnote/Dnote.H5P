@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Dnote.H5P.Dto;
 
@@ -16,7 +14,7 @@ namespace Dnote.H5P
         {
         }
 
-        protected async override Task InnerLoadContentAsync(IEnumerable<string> contentIds)
+        protected override void InnerLoadContent(IEnumerable<string> contentIds)
         {
             _fileDtos.Clear();
 
@@ -25,7 +23,7 @@ namespace Dnote.H5P
                 var metaDataPath = GetMetaDataPath(contentId);
                 H5PContentItemFileDto fileDto;
 
-                var jsonString = await ReadContentAsync(metaDataPath);
+                var jsonString = ReadContent(metaDataPath);
 
                 if (jsonString != null)
                 {
@@ -59,7 +57,7 @@ namespace Dnote.H5P
 
                 var jsonString = JsonConvert.SerializeObject(fileDto);
 
-                StoreContentAsync(metaDataPath, jsonString);
+                StoreContent(metaDataPath, jsonString);
             }
         }
 
@@ -132,9 +130,9 @@ namespace Dnote.H5P
         /// <summary>
         /// Reads the content of the specified file as a string. Returns null if the file does not exist.
         /// </summary>
-        protected abstract Task<string?> ReadContentAsync(string path);
+        protected abstract string? ReadContent(string path);
 
-        protected abstract Task StoreContentAsync(string path, string value);
+        protected abstract void StoreContent(string path, string value);
 
         protected override void InnerSetUserContent(string contentId, string? userContent)
         {

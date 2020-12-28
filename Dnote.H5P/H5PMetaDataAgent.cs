@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Dnote.H5P.Dto;
 using Dnote.H5P.Enums;
 
@@ -21,9 +20,15 @@ namespace Dnote.H5P
             _pathPrefix = pathPrefix;
         }
 
-        public async Task LoadContentAsync(IEnumerable<string> contentIds)
+        public void LoadContent(string contentId)
         {
-            await InnerLoadContentAsync(contentIds);
+            var contentIds = new string[] { contentId };
+            InnerLoadContent(contentIds);
+        }
+
+        public void LoadContent(IEnumerable<string> contentIds)
+        {
+            InnerLoadContent(contentIds);
         }
 
         public void StoreContentItem(H5PJsonDto h5pJson, string contentId, string content)
@@ -133,7 +138,7 @@ namespace Dnote.H5P
             InnerSetUserContent(contentId, userContent);
         }
 
-        protected abstract Task InnerLoadContentAsync(IEnumerable<string> contentIds);
+        protected abstract void InnerLoadContent(IEnumerable<string> contentIds);
 
         protected abstract void InnerStoreContentItem(H5PJsonDto h5pJson, string contentId, string content);
 

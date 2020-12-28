@@ -7,20 +7,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Azure.Storage.Blobs;
 using Dnote.H5P.NetFW.TestWebSite.Enums;
 using Dnote.H5P.NetFW.TestWebSite.Models;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Dnote.H5P.NetFW.TestWebSite.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly CloudStorageAccount _storageAccount;
+        private readonly BlobServiceClient _blobServiceClient;
 
         public HomeController()
         {
-            _storageAccount = CloudStorageAccount.Parse(ConfigurationManager.ConnectionStrings["StorageConnection"].ConnectionString);
+            var connectionString = ConfigurationManager.ConnectionStrings["StorageConnection"].ConnectionString;
+            _blobServiceClient = new BlobServiceClient(connectionString);
         }
 
         [HttpGet]
@@ -70,21 +70,27 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
 
         private async Task<IEnumerable<string>> GetContentItemsAzure()
         {
-            var blobClient = _storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference("h5ptest");
-            var exists = await container.ExistsAsync();
-            if (exists)
+            var containerClient = _blobServiceClient.GetBlobContainerClient("h5ptest");
+            var containerExists = await containerClient.ExistsAsync();
+            if (containerExists)
             {
-                var contentDir = container.GetDirectoryReference("content");
-                var dirBlobs = contentDir.ListBlobs().Where(b => b as CloudBlobDirectory != null).ToList();
-                return dirBlobs.Select(db => db.Uri.Segments.LastOrDefault().TrimEnd('/'));
+                var dirBlobs = new List<string>();
+                var contentDir = containerClient.GetBlobsByHierarchyAsync(prefix: "content", delimiter: "/");
+                await foreach (var item in contentDir)
+                {
+                    if (item.IsPrefix)
+                    {
+                        dirBlobs.Add(Path.GetFileName(item.Blob.Name));
+                    }
+                }
+                return dirBlobs;
             }
 
             return new string[0];
         }
 
         [HttpPost]
-        public async Task<ActionResult> Index(HttpPostedFileBase file, IndexViewModel model)
+        public ActionResult Index(HttpPostedFileBase file, IndexViewModel model)
         {
             if (file != null)
             {
@@ -93,7 +99,7 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
 
                 var importer = new H5PImporter(storageAgent, metaDataAgent);
 
-                await importer.Import(file.InputStream, file.FileName.Replace('.', '-').Replace(' ', '-'));
+                importer.Import(file.InputStream, file.FileName.Replace('.', '-').Replace(' ', '-'));
             }
 
             return Redirect(Url.Action(null, new { model.Storage }));
@@ -128,13 +134,13 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
                     throw new ArgumentOutOfRangeException(nameof(storage));
             }
         }
-
+        
         [HttpGet]
-        public async Task<ActionResult> Exercise(string id, StorageEnum storage)
+        public ActionResult Exercise(string id, StorageEnum storage)
         {
             var metaDataAgent = GetMetaDataAgent(storage);
 
-            await metaDataAgent.LoadContentAsync(new[] { id });
+            metaDataAgent.LoadContent(new[] { id });
 
             var userState = (string?)Session[id];
 

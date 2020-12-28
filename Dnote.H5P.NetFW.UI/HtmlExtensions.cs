@@ -39,18 +39,21 @@ namespace Dnote.H5P.NetFW.UI
             return new MvcHtmlString(sb.ToString());
         }
 
-        public static MvcHtmlString H5PScript(this HtmlHelper helper, H5PMetaDataAgent metaDataAgent, string apiUrlPrefix, int? saveFreq, UrlHelper urlHelper)
+        public static MvcHtmlString H5PMainScript(this HtmlHelper helper, H5PMetaDataAgent metaDataAgent, string apiUrlPrefix, int? saveFreq)
         {
             _ = helper;
 
             var sb = new StringBuilder();
 
-            var items = metaDataAgent.GetContentItems();
-
             sb.AppendLine("<script>");
 
             var mainScript = $@"
-                window.H5PCompleted = {{}};
+                if (!window.H5PCompleted)
+                {{
+                    window.H5PCompleted = {{}};
+                }}
+                if (!window.H5PIntegration)
+                {{
                 window.H5PIntegration = {{
                     'baseUrl': 'http://www.mysite.com',     // No trailing slash
                     'url': '{metaDataAgent.GetPrefix()}',   // Relative to web root
@@ -103,9 +106,25 @@ namespace Dnote.H5P.NetFW.UI
                     }},
                     'contents': []
                 }};
+            }}
             ";
 
             sb.AppendLine(mainScript);
+
+            sb.AppendLine("</script>");
+
+            return new MvcHtmlString(sb.ToString());
+        }
+
+        public static MvcHtmlString H5PItemsScript(this HtmlHelper helper, H5PMetaDataAgent metaDataAgent)
+        {
+            _ = helper;
+
+            var sb = new StringBuilder();
+
+            var items = metaDataAgent.GetContentItems();
+
+            sb.AppendLine("<script>");
 
             foreach (var item in items)
             {

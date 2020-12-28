@@ -1,45 +1,46 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
-using Microsoft.WindowsAzure.Storage;
-using Microsoft.WindowsAzure.Storage.Blob;
 using MimeTypes;
 using Dnote.H5P.Consts;
 using Dnote.H5P.Helpers;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 
 namespace Dnote.H5P
 {
     public class H5PAzureStorageAgent : H5PStorageAgent
     {
         private readonly string _container;
-        private readonly CloudStorageAccount _storageAccount;
+        private readonly BlobServiceClient _blobServiceClient;
 
         public H5PAzureStorageAgent(string connectionString, string container)
         {
             _container = container;
-            _storageAccount = CloudStorageAccount.Parse(connectionString);
+            _blobServiceClient = new BlobServiceClient(connectionString);
         }
 
-        public async override Task StoreFileAsync(Stream stream, string fileName)
+        public override void StoreFile(Stream stream, string fileName)
         {
-            var blobClient = _storageAccount.CreateCloudBlobClient();
-            var container = blobClient.GetContainerReference(_container);
-            var exists = await container.ExistsAsync();
-            if (!exists)
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_container);
+            var containerExists = containerClient.Exists();
+            if (!containerExists)
             {
-                await container.CreateIfNotExistsAsync();
-                await container.SetPermissionsAsync(new BlobContainerPermissions { PublicAccess = BlobContainerPublicAccessType.Blob });
+                _blobServiceClient.CreateBlobContainer(_container, PublicAccessType.Blob);
             }
 
-            var blockBlob = container.GetBlockBlobReference(fileName);
-            blockBlob.Properties.ContentType = MimeTypeMap.GetMimeType(Path.GetExtension(fileName));
+            var blockBlob = containerClient.GetBlobClient(fileName);
+            var blobHttpHeader = new BlobHttpHeaders
+            {
+                ContentType = MimeTypeMap.GetMimeType(Path.GetExtension(fileName))
+            };
 
             // set browser caching on the media blobs
             if (PathHelper.IsCacheableFileType(fileName))
             {
-                blockBlob.Properties.CacheControl = $"public, max-age={H5PConsts.MediaCacheDurationSecs}";
+                blobHttpHeader.CacheControl = $"public, max-age={H5PConsts.MediaCacheDurationSecs}";
             }
 
-            await blockBlob.UploadFromStreamAsync(stream);
+            blockBlob.Upload(stream, blobHttpHeader);
         }
     }
 }

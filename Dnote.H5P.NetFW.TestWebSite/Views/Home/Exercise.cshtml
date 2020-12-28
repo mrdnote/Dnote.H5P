@@ -49,8 +49,11 @@
 
 @section scripts
 {
-    @*The following line renders the data structures that feed the H5P content.*@
-    @Html.H5PScript(Model.H5PMetaDataAgent, null, 30, Url)
+    @*The following line renders the main structures that feed the H5P content.*@
+    @Html.H5PMainScript(Model.H5PMetaDataAgent, null, 30)
+
+    @*The following line renders the item structures that feed the H5P content.*@
+    @Html.H5PItemsScript(Model.H5PMetaDataAgent)
 
     @*The following scripts are copied from the H5P site.*@
     <script src="~/Scripts/jquery.js"></script>

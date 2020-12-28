@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 
 namespace Dnote.H5P
 {
@@ -8,6 +7,6 @@ namespace Dnote.H5P
     /// </summary>
     public abstract class H5PStorageAgent
     {
-        public abstract Task StoreFileAsync(Stream stream, string fileName);
+        public abstract void StoreFile(Stream stream, string fileName);
     }
 }
