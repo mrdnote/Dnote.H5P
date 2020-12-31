@@ -12,10 +12,6 @@ Check out the Dnote.H5P.NetFW.TestWebSite on how to use H5P in your website.
 The main library project, useable in .NET Framework, .NET Core and .NET 5.x.
 ## Dnote.H5P.Test
 Unit test for the Dnote.H5P library.
-## Dnote.H5P.NetFW.UI
-UI layer for displaying H5P content in a .NET Framework website.
-## Dnote.H5P.Core.UI
-TODO. UI layer for displaying H5P content in a .NET Core and .NET 5.x website.
 ## Dnote.H5P.NetFW.TestWebSite
 .NET Framework Website to test the H5P library and to see how it all hooks up.
 
