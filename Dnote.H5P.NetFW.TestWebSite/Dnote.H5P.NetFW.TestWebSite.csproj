@@ -215,6 +215,7 @@
     <Content Include="fonts\h5p-core-26.eot" />
     <Content Include="fonts\h5p-core-26.ttf" />
     <Content Include="fonts\h5p-core-26.woff" />
+    <Content Include="libman.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\dnote.h5p.js" />
     <Content Include="Scripts\h5p-action-bar.js" />
@@ -282,10 +283,6 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dnote.H5P.NetFW.UI\Dnote.H5P.NetFW.UI.csproj">
-      <Project>{e75e5be7-de4a-4c82-a746-c0a7b1f01412}</Project>
-      <Name>Dnote.H5P.NetFW.UI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Dnote.H5P\Dnote.H5P.csproj">
       <Project>{3dbc3197-f8c5-46bc-8494-39af55a7361b}</Project>
       <Name>Dnote.H5P</Name>

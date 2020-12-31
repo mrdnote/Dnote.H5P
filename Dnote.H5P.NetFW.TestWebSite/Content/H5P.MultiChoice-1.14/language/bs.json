@@ -1,46 +1,46 @@
 {
   "semantics": [
     {
-      "label": "Multimedia",
+      "label": "Media",
       "fields": [
         {
-          "label": "Type",
-          "description": "En valgfri mediakilde som vises over spørsmålet."
+          "label": "Tip",
+          "description": "Opcionalni medij da se prikaže iznad pitanja."
         },
         {
-          "label": "Disable image zooming"
+          "label": "Onemogući zumiranje slike"
         }
       ]
     },
     {
-      "label": "Spørsmål"
+      "label": "Pitanje"
     },
     {
-      "label": "Svaralternativer",
-      "entity": "verdi",
+      "label": "Dostupne opcije",
+      "entity": "opcija",
       "field": {
-        "label": "Svaralternativ",
+        "label": "Opcija",
         "fields": [
           {
             "label": "Tekst"
           },
           {
-            "label": "Riktig"
+            "label": "Tačno"
           },
           {
-            "label": "Tips",
+            "label": "Savjeti i feedback",
             "fields": [
               {
-                "label": "Tipstekst",
-                "description": "Hint for brukeren. Dette vil vises før brukeren sjekker sine svar."
+                "label": "Tekst savjeta",
+                "description": "Savjet korisniku. Ovo će se pojaviti prije nego što korisnik provjeri odgovor(e)."
               },
               {
-                "label": "Melding som vises hvis alternativet er valgt",
-                "description": "Melding som vises under svaret på \"check\" hvis svaret er valgt."
+                "label": "Poruka se prikazuje ako je odgovor označen",
+                "description": "Poruka će se pojaviti ispod odgovora \"provjeri\" ako je odgovor označen."
               },
               {
-                "label": "Melding som vises hvis alternativet ikke er valgt",
-                "description": "Melding som vises under svaret på \"check\" hvis andre svar er valgt."
+                "label": "Poruka se prikazuje ako odgovor nije označen",
+                "description": "Poruka će se pojaviti ispod odgovora \"provjeri\" ako je odgovor označen."
               }
             ]
           }
@@ -48,7 +48,7 @@
       }
     },
     {
-      "label": "Overall Feedback",
+      "label": "Ukupan feedback",
       "fields": [
         {
           "widgets": [
@@ -56,13 +56,13 @@
               "label": "Default"
             }
           ],
-          "label": "Define custom feedback for any score range",
+          "label": "Definiraj uobičajeni feedbak za bilo koji raspon rezultata",
           "description": "Click the \"Add range\" button to add as many ranges as you need. Example: 0-20% Bad score, 21-91% Average Score, 91-100% Great Score!",
           "entity": "range",
           "field": {
             "fields": [
               {
-                "label": "Score Range"
+                "label": "Raspon rezultata"
               },
               {},
               {
@@ -79,61 +79,61 @@
       "fields": [
         {
           "label": "Check answer button label",
-          "default": "Sjekk"
+          "default": "Provjeri"
         },
         {
           "label": "Show solution button label",
-          "default": "Vis svar"
+          "default": "Prikaži rješenje"
         },
         {
           "label": "Retry button label",
-          "default": "Prøv igjen"
+          "default": "Ponovi"
         },
         {
           "label": "Tip label",
-          "default": "Vis tips"
+          "default": "Prikaži tip"
         },
         {
           "label": "Textual representation of the score bar for those using a readspeaker",
           "description": "Available variables are :num and :total",
-          "default": "Du fikk :num av :total points"
+          "default": "Osvojili ste :num od :total poena"
         },
         {
           "label": "Tip Available (not displayed)",
-          "default": "Tips tilgjengelig",
+          "default": "Tip available",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Feedback Available (not displayed)",
-          "default": "Tilbakemelding tilgjengelig",
+          "default": "Feedback dostupan",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Read Feedback (not displayed)",
-          "default": "Read feedback",
+          "default": "Čitaj feedback",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Wrong Answer (not displayed)",
-          "default": "Feil svar",
+          "default": "Pogrešan odgovor",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Correct Answer (not displayed)",
-          "default": "Correct answer",
+          "default": "Tačan odgovor",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Option should have been checked",
-          "default": "Skulle ha vært krysset av"
+          "default": "Trebalo biti označeno"
         },
         {
           "label": "Option should not have been checked",
-          "default": "Skulle ikke ha vært krysset av"
+          "default": "Nije trebalo biti označeno"
         },
         {
-          "label": "Text for \"Requires answer\" message",
-          "default": "Du må svare på denne før du kan se løsningen"
+          "label": "Tekst za \"Zahtjeva odgovor\" poruku",
+          "default": "Molimo vas da odgovorite prije nego što vidite rješenje."
         },
         {
           "label": "Assistive technology description for \"Check\" button",
@@ -150,43 +150,43 @@
       ]
     },
     {
-      "label": "Behavioural settings",
+      "label": "Postavke ponašanje",
       "description": "These options will let you control how the task behaves.",
       "fields": [
         {
-          "label": "Enable \"Retry\" button"
+          "label": "Omogući dugme \"Ponovi\" "
         },
         {
-          "label": "Enable \"Show Solution\" button"
+          "label": "Omogući dugme \"Prikaži rješenje\" "
         },
         {
-          "label": "Enable \"Check\" button"
+          "label": "Omogući dugme \"Provjeri\" "
         },
         {
-          "label": "Question Type",
+          "label": "Vrsta pitanja",
           "description": "Select the look and behaviour of the question.",
           "options": [
             {
               "label": "Automatic"
             },
             {
-              "label": "Multiple Choice (Checkboxes)"
+              "label": "Višestruki izbor (Checkboxes)"
             },
             {
-              "label": "Single Choice (Radio Buttons)"
+              "label": "Jedan izbor (Radio)"
             }
           ]
         },
         {
-          "label": "Give one point for the whole task",
+          "label": "Daje jedan poen za cijeli zadatak",
           "description": "Enable to give a total of one point for multiple correct answers. This will not be an option in \"Single answer\" mode."
         },
         {
-          "label": "Randomize answers",
+          "label": "Izmješaj odgovore",
           "description": "Enable to randomize the order of the answers on display."
         },
         {
-          "label": "Require answer before the solution can be viewed"
+          "label": "zahtjeva odgovor prije nego što se rješenje može vidjeti."
         },
         {
           "label": "Show confirmation dialog on \"Check\""
@@ -195,15 +195,15 @@
           "label": "Show confirmation dialog on \"Retry\""
         },
         {
-          "label": "Automatically check answers",
+          "label": "Automatski provjeri odgovore",
           "description": "Enabling this option will make accessibility suffer, make sure you know what you're doing."
         },
         {
-          "label": "Pass percentage",
+          "label": "Procenat za prolaz",
           "description": "This setting often won't have any effect. It is the percentage of the total score required for getting 1 point when one point for the entire task is enabled, and for getting result.success in xAPI statements."
         },
         {
-          "label": "Show score points",
+          "label": "Prikaži broj poena",
           "description": "Show points earned for each answer. This will not be an option in 'Single answer' mode or if 'Give one point for the whole task' option is enabled."
         }
       ]
@@ -212,20 +212,20 @@
       "label": "Check confirmation dialog",
       "fields": [
         {
-          "label": "Tittel",
-          "default": "Finish ?"
+          "label": "Header text",
+          "default": "Završi?"
         },
         {
-          "label": "Tekst",
-          "default": "Er du sikker på at du er ferdig?"
+          "label": "Body text",
+          "default": "Jeste li sigurni da želite završiti?"
         },
         {
-          "label": "Etikett for \"Avbryt\"-knapp",
-          "default": "Avbryt"
+          "label": "Oznaka za dugme otkaži",
+          "default": "Otkaži"
         },
         {
-          "label": "Etikett for \"Bekreft\"-knapp",
-          "default": "Bekreft"
+          "label": "Oznaka za dugme potvrdi",
+          "default": "Potvrdi"
         }
       ]
     },
@@ -233,20 +233,20 @@
       "label": "Retry confirmation dialog",
       "fields": [
         {
-          "label": "Header text",
-          "default": "Prøv igjen?"
+          "label": "Tekst zaglavljat",
+          "default": "Ponovi?"
         },
         {
-          "label": "Body text",
-          "default": "Er du sikker på at du vil prøve igjen?"
+          "label": "Glavni tekst",
+          "default": "Jeste li sigurni da želite ponoviti?"
         },
         {
-          "label": "Cancel button label",
-          "default": "Avbryt"
+          "label": "Oznaka za dugme otkaži",
+          "default": "Otkaži"
         },
         {
-          "label": "Confirm button label",
-          "default": "Bekreft"
+          "label": "Oznaka za dugme potvrdi",
+          "default": "Potvrdi"
         }
       ]
     }

@@ -7,7 +7,7 @@ namespace Dnote.H5P
 {
     public abstract class H5PFileMetaDataAgent : H5PMetaDataAgent
     {
-        private readonly List<H5PContentItemFileDto> _fileDtos = new List<H5PContentItemFileDto>();
+        private readonly List<H5PContentItemDto> _fileDtos = new List<H5PContentItemDto>();
 
         public H5PFileMetaDataAgent(string? pathPrefix)
             : base(pathPrefix)
@@ -21,17 +21,17 @@ namespace Dnote.H5P
             foreach (var contentId in contentIds)
             {
                 var metaDataPath = GetMetaDataPath(contentId);
-                H5PContentItemFileDto fileDto;
+                H5PContentItemDto fileDto;
 
                 var jsonString = ReadContent(metaDataPath);
 
                 if (jsonString != null)
                 {
-                    fileDto = JsonConvert.DeserializeObject<H5PContentItemFileDto>(jsonString);
+                    fileDto = JsonConvert.DeserializeObject<H5PContentItemDto>(jsonString);
                 }
                 else
                 {
-                    fileDto = new H5PContentItemFileDto
+                    fileDto = new H5PContentItemDto
                     {
                         ContentId = contentId
                     };
@@ -61,12 +61,6 @@ namespace Dnote.H5P
             }
         }
 
-        public void SetVisiblity(string contentId, bool visible)
-        {
-            var fileDto = _fileDtos.FirstOrDefault(f => f.ContentId == contentId);
-            fileDto.Render = visible;
-        }
-
         protected override void UpdateLibraryInContent(string contentId, string machineName, int majorVersion, int minorVersion, IEnumerable<string>? jsFiles, IEnumerable<string>? cssFiles, int order,
             bool isMainLibrary)
         {
@@ -82,7 +76,7 @@ namespace Dnote.H5P
 
             if (library == null)
             {
-                library = new H5PContentItemFileDto.Library
+                library = new H5PContentItemDto.Library
                 {
                     MachineName = machineName,
                     MajorVersion = majorVersion,
@@ -101,14 +95,20 @@ namespace Dnote.H5P
             }
         }
 
-        protected override IEnumerable<H5PContentItemFileDto> InnerGetContentItems()
+        protected override IEnumerable<H5PContentItemDto> InnerGetContentItems()
         {
             return _fileDtos;
         }
 
-        protected override IEnumerable<H5PLibraryForContentItemDto> GetLibrariesForContentItems()
+        protected override H5PContentItemDto InnerGetContentItem(string contentId)
         {
-            var contentLibraries = _fileDtos.SelectMany(fd => fd.Libraries).Distinct().OrderBy(l => l.Order);
+            return _fileDtos.FirstOrDefault(f => f.ContentId == contentId);
+        }
+
+        protected override IEnumerable<H5PLibraryForContentItemDto> GetLibrariesForContentItem(string contentId)
+        {
+            var fileDto = _fileDtos.FirstOrDefault(f => f.ContentId == contentId);
+            var contentLibraries = fileDto.Libraries.OrderBy(l => l.Order);
 
             return contentLibraries.Select(l => new H5PLibraryForContentItemDto
             {
@@ -133,11 +133,5 @@ namespace Dnote.H5P
         protected abstract string? ReadContent(string path);
 
         protected abstract void StoreContent(string path, string value);
-
-        protected override void InnerSetUserContent(string contentId, string? userContent)
-        {
-            var fileDto = _fileDtos.FirstOrDefault(f => f.ContentId == contentId);
-            fileDto.UserContent = userContent;
-        }
     }
 }

@@ -75,12 +75,12 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
             if (containerExists)
             {
                 var dirBlobs = new List<string>();
-                var contentDir = containerClient.GetBlobsByHierarchyAsync(prefix: "content", delimiter: "/");
+                var contentDir = containerClient.GetBlobsByHierarchyAsync(prefix: "content/", delimiter: "/");
                 await foreach (var item in contentDir)
                 {
                     if (item.IsPrefix)
                     {
-                        dirBlobs.Add(Path.GetFileName(item.Blob.Name));
+                        dirBlobs.Add(Path.GetFileName(item.Prefix.TrimEnd('/')));
                     }
                 }
                 return dirBlobs;
@@ -146,8 +146,6 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
 
             // An empty string user state means the content item has been submitted, but the content type does not support state.
             var visible = userState != "";
-            metaDataAgent.SetVisiblity(id, visible);
-            metaDataAgent.SetUserState(id, userState);
 
             var contentItem = metaDataAgent.GetContentItem(id);
 
@@ -157,6 +155,7 @@ namespace Dnote.H5P.NetFW.TestWebSite.Controllers
                 Visible = visible,
                 Title = contentItem.Title,
                 H5PMetaDataAgent = metaDataAgent,
+                State = userState,
                 Storage = storage
             };
 

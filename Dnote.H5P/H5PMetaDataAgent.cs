@@ -43,12 +43,12 @@ namespace Dnote.H5P
             }
         }
 
-        public IEnumerable<H5PContentItemFileDto> GetContentItems()
+        public IEnumerable<H5PContentItemDto> GetContentItems()
         {
             return InnerGetContentItems();
         }
 
-        public H5PContentItemFileDto GetContentItem(string contentId)
+        public H5PContentItemDto GetContentItem(string contentId)
         {
             return InnerGetContentItems().FirstOrDefault(i => i.ContentId == contentId);
         }
@@ -99,16 +99,27 @@ namespace Dnote.H5P
             }
         }
 
-        public IEnumerable<string> GetIncludeFilesForContentItems(FileTypes fileType)
+        public string GetIncludeFilesCsv(string contentId, FileTypes fileType)
         {
-            var libraries = GetLibrariesForContentItems();
+            return string.Join(",", GetIncludeFiles(contentId, fileType));
+        }
 
-            var hasVersionConflicts = libraries.GroupBy(l => new { l.MachineName, l.MajorVersion, l.MinorVersion }).Any(g => g.Count() > 1);
+        public string GetLibrary(string contentId)
+        {
+            var library = InnerGetContentItem(contentId).MainLibrary;
+            return $"{library.MachineName} {library.MajorVersion}.{library.MinorVersion}";
+        }
 
-            if (hasVersionConflicts)
-            {
-                throw new Exception("The specified content items are depended on different versions of the same library!");
-            }
+        protected abstract H5PContentItemDto InnerGetContentItem(string contentId);
+
+        public string GetTitle(string contentId)
+        {
+            return InnerGetContentItem(contentId).Title;
+        }
+
+        public IEnumerable<string> GetIncludeFiles(string contentId, FileTypes fileType)
+        {
+            var libraries = GetLibrariesForContentItem(contentId);
 
             var pathPrefix = _pathPrefix;
 
@@ -133,18 +144,16 @@ namespace Dnote.H5P
             }
         }
 
-        public void SetUserState(string contentId, string? userContent)
+        public string GetJsonContent(string contentId)
         {
-            InnerSetUserContent(contentId, userContent);
+            return InnerGetContentItem(contentId).Content;
         }
 
         protected abstract void InnerLoadContent(IEnumerable<string> contentIds);
 
         protected abstract void InnerStoreContentItem(H5PJsonDto h5pJson, string contentId, string content);
 
-        protected abstract void InnerSetUserContent(string contentId, string? userContent);
-
-        protected abstract IEnumerable<H5PContentItemFileDto> InnerGetContentItems();
+        protected abstract IEnumerable<H5PContentItemDto> InnerGetContentItems();
 
         protected abstract void SaveLibrary(string title, string machineName, int majorVersion, int minorVersion, int patchVersion, int? coreApiMajorVersion, int? coreApiMinorVersion, 
             string author, IEnumerable<string>? jsFiles, IEnumerable<string>? cssFiles);
@@ -156,7 +165,7 @@ namespace Dnote.H5P
         protected abstract void UpdateLibraryInContent(string contentId, string machineName, int majorVersion, int minorVersion, IEnumerable<string>? jsFiles, IEnumerable<string>? cssFiles, int order,
             bool isMainLibrary);
 
-        protected abstract IEnumerable<H5PLibraryForContentItemDto> GetLibrariesForContentItems();
+        protected abstract IEnumerable<H5PLibraryForContentItemDto> GetLibrariesForContentItem(string contentId);
 
         protected abstract string? GetFileSystemPrefix();
     }

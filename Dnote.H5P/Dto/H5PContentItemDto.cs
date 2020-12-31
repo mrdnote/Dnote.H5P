@@ -2,7 +2,7 @@
 
 namespace Dnote.H5P.Dto
 {
-    public class H5PContentItemFileDto
+    public class H5PContentItemDto
     {
         public string ContentId { get; set; } = null!;
 
@@ -11,8 +11,6 @@ namespace Dnote.H5P.Dto
         public string Content { get; set; } = null!;
 
         public string? UserContent { get; set; }
-
-        public bool Render { get; set; } = true;
 
         public class Library
         {

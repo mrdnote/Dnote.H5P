@@ -1,11 +1,11 @@
 {
   "semantics": [
     {
-      "label": "Multimedia",
+      "label": "Media",
       "fields": [
         {
           "label": "Type",
-          "description": "En valgfri mediakilde som vises over spørsmålet."
+          "description": "Optional media to display above the question."
         },
         {
           "label": "Disable image zooming"
@@ -13,34 +13,34 @@
       ]
     },
     {
-      "label": "Spørsmål"
+      "label": "Question"
     },
     {
-      "label": "Svaralternativer",
-      "entity": "verdi",
+      "label": "Available options",
+      "entity": "option",
       "field": {
-        "label": "Svaralternativ",
+        "label": "Option",
         "fields": [
           {
-            "label": "Tekst"
+            "label": "Text"
           },
           {
-            "label": "Riktig"
+            "label": "Correct"
           },
           {
-            "label": "Tips",
+            "label": "Tips and feedback",
             "fields": [
               {
-                "label": "Tipstekst",
-                "description": "Hint for brukeren. Dette vil vises før brukeren sjekker sine svar."
+                "label": "Tip text",
+                "description": "Hint for the user. This will appear before user checks his answer/answers."
               },
               {
-                "label": "Melding som vises hvis alternativet er valgt",
-                "description": "Melding som vises under svaret på \"check\" hvis svaret er valgt."
+                "label": "Message displayed if answer is selected",
+                "description": "Message will appear below the answer on \"check\" if this answer is selected."
               },
               {
-                "label": "Melding som vises hvis alternativet ikke er valgt",
-                "description": "Melding som vises under svaret på \"check\" hvis andre svar er valgt."
+                "label": "Message displayed if answer is not selected",
+                "description": "Message will appear below the answer on \"check\" if this answer is not selected."
               }
             ]
           }
@@ -79,33 +79,33 @@
       "fields": [
         {
           "label": "Check answer button label",
-          "default": "Sjekk"
+          "default": "Seiceáil"
         },
         {
           "label": "Show solution button label",
-          "default": "Vis svar"
+          "default": "Taispeáin an freagra"
         },
         {
           "label": "Retry button label",
-          "default": "Prøv igjen"
+          "default": "Triail arís"
         },
         {
           "label": "Tip label",
-          "default": "Vis tips"
+          "default": "Taispeáin nod"
         },
         {
           "label": "Textual representation of the score bar for those using a readspeaker",
           "description": "Available variables are :num and :total",
-          "default": "Du fikk :num av :total points"
+          "default": "Scóráil tú :num as :total phointe"
         },
         {
           "label": "Tip Available (not displayed)",
-          "default": "Tips tilgjengelig",
+          "default": "Tip available",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Feedback Available (not displayed)",
-          "default": "Tilbakemelding tilgjengelig",
+          "default": "Feedback available",
           "description": "Accessibility text used for readspeakers"
         },
         {
@@ -115,25 +115,25 @@
         },
         {
           "label": "Wrong Answer (not displayed)",
-          "default": "Feil svar",
+          "default": "Freagra mícheart",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Correct Answer (not displayed)",
-          "default": "Correct answer",
+          "default": "Freagra ceart",
           "description": "Accessibility text used for readspeakers"
         },
         {
           "label": "Option should have been checked",
-          "default": "Skulle ha vært krysset av"
+          "default": "Should have been checked"
         },
         {
           "label": "Option should not have been checked",
-          "default": "Skulle ikke ha vært krysset av"
+          "default": "Should not have been checked"
         },
         {
           "label": "Text for \"Requires answer\" message",
-          "default": "Du må svare på denne før du kan se løsningen"
+          "default": "Please answer before viewing the solution"
         },
         {
           "label": "Assistive technology description for \"Check\" button",
@@ -154,13 +154,13 @@
       "description": "These options will let you control how the task behaves.",
       "fields": [
         {
-          "label": "Enable \"Retry\" button"
+          "label": "Enable \"Triail arís\" button"
         },
         {
-          "label": "Enable \"Show Solution\" button"
+          "label": "Enable \"Taispeáin an freagra\" button"
         },
         {
-          "label": "Enable \"Check\" button"
+          "label": "Enable \"Seiceáil\" button"
         },
         {
           "label": "Question Type",
@@ -189,10 +189,10 @@
           "label": "Require answer before the solution can be viewed"
         },
         {
-          "label": "Show confirmation dialog on \"Check\""
+          "label": "Show confirmation dialog on \"Seiceáil\""
         },
         {
-          "label": "Show confirmation dialog on \"Retry\""
+          "label": "Show confirmation dialog on \"Triail arís\""
         },
         {
           "label": "Automatically check answers",
@@ -212,20 +212,20 @@
       "label": "Check confirmation dialog",
       "fields": [
         {
-          "label": "Tittel",
-          "default": "Finish ?"
+          "label": "Header text",
+          "default": "Críochnaigh ?"
         },
         {
-          "label": "Tekst",
-          "default": "Er du sikker på at du er ferdig?"
+          "label": "Body text",
+          "default": "An bhfuil tú cinnte go bhfuil tú críochnaithe?"
         },
         {
-          "label": "Etikett for \"Avbryt\"-knapp",
-          "default": "Avbryt"
+          "label": "Cancel button label",
+          "default": "Cealaigh"
         },
         {
-          "label": "Etikett for \"Bekreft\"-knapp",
-          "default": "Bekreft"
+          "label": "Confirm button label",
+          "default": "Dearbhaigh"
         }
       ]
     },
@@ -234,19 +234,19 @@
       "fields": [
         {
           "label": "Header text",
-          "default": "Prøv igjen?"
+          "default": "Triail arís?"
         },
         {
           "label": "Body text",
-          "default": "Er du sikker på at du vil prøve igjen?"
+          "default": "An bhfuil tú cinnte go bhfuil tú ag iarraidh é a thriail arís?"
         },
         {
           "label": "Cancel button label",
-          "default": "Avbryt"
+          "default": "Cealaigh"
         },
         {
           "label": "Confirm button label",
-          "default": "Bekreft"
+          "default": "Dearbhaigh"
         }
       ]
     }

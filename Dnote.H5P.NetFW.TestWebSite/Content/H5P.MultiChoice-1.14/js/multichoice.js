@@ -100,7 +100,10 @@ H5P.MultiChoice = function (options, contentId, contentData) {
       readFeedback: 'Read feedback',
       shouldCheck: "Should have been checked",
       shouldNotCheck: "Should not have been checked",
-      noInput: 'Input is required before viewing the solution'
+      noInput: 'Input is required before viewing the solution',
+      a11yCheck: 'Check the answers. The responses will be marked as correct, incorrect, or unanswered.',
+      a11yShowSolution: 'Show the solution. The task will be marked with its correct solution.',
+      a11yRetry: 'Retry the task. Reset all responses and start the task over again.',
     },
     behaviour: {
       enableRetry: true,
@@ -644,7 +647,9 @@ H5P.MultiChoice = function (options, contentId, contentData) {
         self.showAllSolutions();
       }
 
-    }, false);
+    }, false, {
+      'aria-label': params.UI.a11yShowSolution,
+    });
 
     // Check solution button
     if (params.behaviour.enableCheckButton && (!params.behaviour.autoCheck || !params.behaviour.singleAnswer)) {
@@ -654,7 +659,9 @@ H5P.MultiChoice = function (options, contentId, contentData) {
           checkAnswer();
         },
         true,
-        {},
+        {
+          'aria-label': params.UI.a11yCheck,
+        },
         {
           confirmationDialog: {
             enable: params.behaviour.confirmCheckDialog,
@@ -693,7 +700,9 @@ H5P.MultiChoice = function (options, contentId, contentData) {
          $(tip[i]).detach().appendTo($(answersDisplayed[idMap.indexOf(oldIdMap[i])]).find('.h5p-alternative-container'));
        }
      }
-    }, false, {}, {
+    }, false, {
+      'aria-label': params.UI.a11yRetry,
+    }, {
       confirmationDialog: {
         enable: params.behaviour.confirmRetryDialog,
         l10n: params.confirmRetry,

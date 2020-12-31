@@ -1,6 +1,5 @@
-﻿@using Dnote.H5P.NetFW.UI
+﻿@using Dnote.H5P.Enums
 @using Dnote.H5P.NetFW.TestWebSite.Models
-@using Dnote.H5P.NetFW.TestWebSite.App_Start
 
 @model ExerciseViewModel
 @{
@@ -10,9 +9,6 @@
 @section head
 {
     <link rel="stylesheet" href="~/Content/h5p.css" />
-
-    @*The following line renders the style sheets needed by the h5p content items on the page.*@
-    @Html.H5PCssIncludes(Model.H5PMetaDataAgent)
 }
 
 @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
@@ -32,8 +28,14 @@
 
             @if (Model.Visible)
             {
-                // Below is the h5p content item placeholder which is replace by the h5p system.
-                <div class="h5p-content" id="@Model.Id" data-content-id="@Model.Id"></div>
+                <h5p-content content-id="@Model.Id"
+                             title="@Model.H5PMetaDataAgent.GetTitle(Model.Id)"
+                             css="@Model.H5PMetaDataAgent.GetIncludeFilesCsv(Model.Id, FileTypes.Css)"
+                             js="@Model.H5PMetaDataAgent.GetIncludeFilesCsv(Model.Id, FileTypes.Js)"
+                             library="@Model.H5PMetaDataAgent.GetLibrary(Model.Id)"
+                             json-content="@Model.H5PMetaDataAgent.GetJsonContent(Model.Id)"
+                             user-content="@Model.State"
+                             prefix="@Model.H5PMetaDataAgent.GetPrefix()"></h5p-content>
             }
             else
             {
@@ -49,89 +51,29 @@
 
 @section scripts
 {
-    @*The following line renders the main structures that feed the H5P content.*@
-    @Html.H5PMainScript(Model.H5PMetaDataAgent, null, 30)
+    @if (Model.Visible)
+    {
+        @*The following scripts are copied from the H5P site.*@
+        <script src="~/Scripts/jquery.js"></script>
+        <script src="~/Scripts/h5p-event-dispatcher.js"></script>
+        <script src="~/Scripts/h5p-action-bar.js"></script>
+        <script src="~/Scripts/h5p-confirmation-dialog.js"></script>
+        <script src="~/Scripts/h5p.js"></script>
+        <script src="~/Scripts/request-queue.js"></script>
+        <script src="~/Scripts/h5p-x-api-event.js"></script>
+        <script src="~/Scripts/h5p-x-api.js"></script>
+        <script src="~/Scripts/h5p-content-type.js"></script>
+        <script src="~/Scripts/dnote.h5p.js"></script>
 
-    @*The following line renders the item structures that feed the H5P content.*@
-    @Html.H5PItemsScript(Model.H5PMetaDataAgent)
-
-    @*The following scripts are copied from the H5P site.*@
-    <script src="~/Scripts/jquery.js"></script>
-    <script src="~/Scripts/h5p-event-dispatcher.js"></script>
-    <script src="~/Scripts/h5p-action-bar.js"></script>
-    <script src="~/Scripts/h5p-confirmation-dialog.js"></script>
-    <script src="~/Scripts/h5p.js"></script>
-    <script src="~/Scripts/request-queue.js"></script>
-    <script src="~/Scripts/h5p-x-api-event.js"></script>
-    <script src="~/Scripts/h5p-x-api.js"></script>
-    <script src="~/Scripts/h5p-content-type.js"></script>
-
-    @*The following line includes all the library scripts needed by the content items on the page.*@
-    @Html.H5PJsIncludes(Model.H5PMetaDataAgent)
-
-    <script>
-        // List of ids of the content items on the page.
-        const contentIds = [];
-        // List of H5P content instances on the page.
-        const instances = [];
-
-        // After initialization, put the content items that are previously finished in "solution mode".
-        H5P.externalDispatcher.on('initialized', function (_event)
-        {
-            for (var i = 0; i < instances.length; i++)
+        <script>
+            $('h5p-content')[0].onfinished = function (state)
             {
-                const instance = instances[i];
-                if (window.H5PCompleted[instance.contentId])
-                {
-                    if (instance.showSolutions)
-                    {
-                        instance.showSolutions();
-                    }
-                }
-            }
-        });
-
-        H5P.externalDispatcher.on('xAPI', function (event)
-        {
-            // Keep track of instance objects of the content items on this page. The instance object is only passed during xAPI events, so we need this opportunity to get a hold of them.
-            const contentId = event.data.statement.object.definition.extensions['http://h5p.org/x-api/h5p-local-content-id'];
-            if (contentIds.indexOf(contentId) == -1)
-            {
-                contentIds.push(contentId);
-                instances.push(this);
-            }
-
-            let finished = false;
-
-            // If this content item has been completed, store the state of the item in a form field so we can process it in the postback of the page.
-            if (this.getCurrentState)
-            {
-                // Path 1: Process content types that support state
-                const state = this.getCurrentState();
-                const stateJson = JSON.stringify(state);
-                const result = event.data.statement.result;
-
-                if (result)
-                {
-                    $('#@Html.IdFor(m => m.State)').val(stateJson);
-                    finished = true;
-                }
-            }
-            else
-            {
-                // Path 2: Process content types that do not support state
-                if (event.data.statement.verb.id == "http://adlnet.gov/expapi/verbs/completed")
-                {
-                    finished = true;
-                }
-            }
-
-            if (finished)
-            {
+                // Save the answers of the user.
+                $('#@Html.IdFor(m => m.State)').val(state);
                 // Enable the save button, so the user can submit the page.
                 $('#SaveButton').removeClass('disabled');
                 $('#SaveButton').removeAttr('disabled');
-            }
-        });
-    </script>
+            };
+        </script>
+    }
 }

@@ -20,7 +20,8 @@ namespace Dnote.H5P.Test
         [TestMethod]
         public void ImportTest()
         {
-            var fileName = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "TestFiles\\test-mc-1291177782275013467.h5p");
+            var fileName = "test-mc-1291177782275013467.h5p";
+            var filePath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "TestFiles\\" + fileName);
             var targetPath = Path.Combine(AppDomain.CurrentDomain.SetupInformation.ApplicationBase, "ImportFiles");
             //var metaDataPath = Path.Combine(targetPath, "MetaData");
             if (Directory.Exists(targetPath))
@@ -37,7 +38,7 @@ namespace Dnote.H5P.Test
             var metaDataAgent = new H5PPhysicalFileMetaDataAgent("ImportFiles", targetPath);
             var importer = new H5PImporter(storageAgent, metaDataAgent);
 
-            importer.Import(fileName);
+            importer.Import(filePath);
 
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "EmbeddedJS-1.0", "js", "ejs_production.js")));
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "EmbeddedJS-1.0", "js", "ejs_viewhelpers.js")));
@@ -46,13 +47,13 @@ namespace Dnote.H5P.Test
 
             Assert.IsTrue(File.Exists(Path.Combine(targetPath, "FontAwesome-4.5", "fontawesome-webfont.eot")));
 
-            var jsIncludeFiles = metaDataAgent.GetIncludeFilesForContentItems(FileTypes.Js);
+            var jsIncludeFiles = metaDataAgent.GetIncludeFiles(fileName, FileTypes.Js);
 
             Assert.AreEqual(20, jsIncludeFiles.Count());
             Assert.AreEqual("ImportFiles/EmbeddedJS-1.0/js/ejs_production.js", jsIncludeFiles.First());
             Assert.AreEqual("ImportFiles/EmbeddedJS-1.0/js/ejs_viewhelpers.js", jsIncludeFiles.Skip(1).First());
 
-            var cssIncludeFiles = metaDataAgent.GetIncludeFilesForContentItems(FileTypes.Css);
+            var cssIncludeFiles = metaDataAgent.GetIncludeFiles(fileName, FileTypes.Css);
 
             Assert.AreEqual(18, cssIncludeFiles.Count());
             Assert.AreEqual("ImportFiles/FontAwesome-4.5/h5p-font-awesome.min.css", cssIncludeFiles.First());

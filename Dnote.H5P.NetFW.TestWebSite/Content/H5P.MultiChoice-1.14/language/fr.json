@@ -1,10 +1,10 @@
 {
   "semantics": [
     {
-      "label": "Image ou vidéo",
+      "label": "Média",
       "fields": [
         {
-          "label": "Type de média",
+          "label": "Type",
           "description": "Média à afficher au-dessus de la question (facultatif)."
         },
         {
@@ -53,21 +53,21 @@
         {
           "widgets": [
             {
-              "label": "Valeur par défaut"
+              "label": "Par défaut"
             }
           ],
-          "label": "Ajouter des commentaires personnalisés selon le barème de votre choix",
-          "description": "Par exemple: 0-20% Peux faire mieux, 21-91% Dans la moyenne, 91-100% Bravo!",
-          "entity": "Tranche",
+          "label": "Définissez des feedbacks pour différents intervalles de scores",
+          "description": "Cliquez sur le bouton \"Ajouter Intervalle\" pour ajouter autant d'intervalles de score que vous souhaitez. Exemple: 0-20% Mauvais score, 21-91% Score moyen, 91-100% Score excellent !",
+          "entity": "intervalle",
           "field": {
             "fields": [
               {
-                "label": "Barème"
+                "label": "Intervalle de scores"
               },
               {},
               {
-                "label": "Feedback selon le barème",
-                "placeholder": "Compléter"
+                "label": "Feedback pour cet intervalle de scores",
+                "placeholder": "Remplissez le feedback"
               }
             ]
           }
@@ -78,8 +78,8 @@
       "label": "Apparence",
       "fields": [
         {
-          "label": "Le texte qui apparaît sur votre bouton dans le champ Afficher la réponse",
-          "default": "Afficher la réponse"
+          "label": "Le texte qui apparaît sur votre bouton dans le champ Vérifier",
+          "default": "Vérifier"
         },
         {
           "label": "Le texte qui apparaît sur votre bouton dans le champ Afficher la solution",
@@ -134,6 +134,18 @@
         {
           "label": "Le texte pour le message \"Réponse requise\" ",
           "default": "Répondez s'il vous plait avant de visionner la solution."
+        },
+        {
+          "label": "Assistive technology description for \"Check\" button",
+          "default": "Check the answers. The responses will be marked as correct, incorrect, or unanswered."
+        },
+        {
+          "label": "Assistive technology description for \"Show Solution\" button",
+          "default": "Show the solution. The task will be marked with its correct solution."
+        },
+        {
+          "label": "Assistive technology description for \"Retry\" button",
+          "default": "Retry the task. Reset all responses and start the task over again."
         }
       ]
     },
